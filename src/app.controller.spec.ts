@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 describe('AppController', () => {
   let app: TestingModule;
   let appController: AppController;
-  let muscleGroupsResponse: MuscleGroup[]
+  let muscleGroupsResponse: MuscleGroup[];
   let exercisesResponse: Exercise[];
 
   beforeAll(async () => {
@@ -29,15 +29,7 @@ describe('AppController', () => {
     const legs = { id: 6, name: 'Pernas' };
     const cardio = { id: 7, name: 'Cardio' };
 
-    const muscleGroups = [
-      abs,
-      arms,
-      back,
-      shoulders,
-      chest,
-      legs,
-      cardio,
-    ];
+    const muscleGroups = [abs, arms, back, shoulders, chest, legs, cardio];
     const expectedLength = muscleGroups.length;
 
     muscleGroups.forEach(group => {
@@ -57,5 +49,5 @@ describe('AppController', () => {
     it(`should return an array ${expectedLength} items long`, async () => {
       expect(exercisesResponse).toHaveLength(expectedLength);
     });
-  })
+  });
 });
