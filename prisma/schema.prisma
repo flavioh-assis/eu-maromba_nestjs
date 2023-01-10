@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model MuscleGroup {
+  id       Int        @id
+  name     String     @db.VarChar(30)
+  Exercise Exercise[]
+}
+
+model Exercise {
+  id            Int         @id
+  name          String      @db.VarChar(50)
+  muscleGroup   MuscleGroup @relation(references: [id], fields: [muscleGroupId])
+  muscleGroupId Int
+  Training      Training[]
+}
+
+model WorkoutSheet {
+  id       Int        @id @default(autoincrement())
+  name     String     @db.VarChar(30)
+  Training Training[]
+}
+
+model Training {
+  id             Int          @id @default(autoincrement())
+  exercise       Exercise     @relation(fields: [exerciseId], references: [id])
+  exerciseId     Int
+  workoutSheet   WorkoutSheet @relation(fields: [workoutSheetId], references: [id])
+  workoutSheetId Int
+  sets           Int
+  reps           Int
+  restTime       Int
+  obs            String       @db.VarChar(100)
+}
