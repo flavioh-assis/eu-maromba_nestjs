@@ -5,11 +5,6 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('muscleGroups')
-  getAllMuscleGroups() {
-    return this.appService.getMuscleGroups();
-  }
-
   @Get('exercises')
   getAllExercises() {
     return this.appService.getExercises();
