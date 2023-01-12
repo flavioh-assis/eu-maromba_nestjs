@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 @Injectable()
-export class MuscleGroupsService {
+export class MuscleGroupService {
   async findAll() {
     try {
       return await prisma.muscleGroup.findMany();

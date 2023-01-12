@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 @Injectable()
-export class ExercisesService {
+export class ExerciseService {
   async findAll() {
     try {
       return await prisma.exercise.findMany();

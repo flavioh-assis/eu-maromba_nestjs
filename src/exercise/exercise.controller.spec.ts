@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ExercisesController } from './exercises.controller';
-import { ExercisesService } from './exercises.service';
+import { ExerciseController } from './exercise.controller';
+import { ExerciseService } from './exercise.service';
 
-describe('ExercisesController', () => {
+describe('ExerciseController', () => {
   let app: TestingModule;
-  let controller: ExercisesController;
+  let controller: ExerciseController;
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
-      controllers: [ExercisesController],
-      providers: [ExercisesService],
+      controllers: [ExerciseController],
+      providers: [ExerciseService],
     }).compile();
 
-    controller = app.get(ExercisesController);
+    controller = app.get(ExerciseController);
   });
 
   describe('findAll', () => {
