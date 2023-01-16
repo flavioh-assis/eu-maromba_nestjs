@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Training` MODIFY `obs` VARCHAR(100) NOT NULL DEFAULT '';
