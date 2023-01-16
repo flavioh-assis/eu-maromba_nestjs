@@ -20,6 +20,8 @@ enum Text {
   Found = 'Successfully found.',
   NotCreated = 'Error on create.',
   NotFound = 'Error on find.',
+  NotUpdated = 'Error on update.',
+  Updated = 'Success on update.',
 }
 
 export function errorOnCreate(error: PrismaClientUnknownRequestError) {
@@ -27,6 +29,15 @@ export function errorOnCreate(error: PrismaClientUnknownRequestError) {
     success: false,
     statusCode: Code.InternalErrorServer,
     statusText: `${Text.NotCreated} ${error.message}`,
+    data: [],
+  } as RequestResponse;
+}
+
+export function errorOnUpdate(error: PrismaClientUnknownRequestError) {
+  return {
+    success: false,
+    statusCode: Code.InternalErrorServer,
+    statusText: `${Text.NotUpdated} ${error.message}`,
     data: [],
   } as RequestResponse;
 }
@@ -59,5 +70,14 @@ export function successOnFind(
     statusCode: Code.Ok,
     statusText: Text.Found,
     data,
+  } as RequestResponse;
+}
+
+export function successOnUpdate(data: Exercise | Training | WorkoutSheet) {
+  return {
+    success: true,
+    statusCode: Code.NoContent,
+    statusText: Text.Updated,
+    data: [data],
   } as RequestResponse;
 }
