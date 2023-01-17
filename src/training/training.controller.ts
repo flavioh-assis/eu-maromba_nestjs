@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { Training } from '@prisma/client';
+import { errorOnValidate } from 'src/app.response';
+import { validateId } from 'src/app.validator';
 import { TrainingService } from './training.service';
 
 @Controller('api/trainings')
@@ -14,5 +16,14 @@ export class TrainingController {
   @Get()
   async findAll() {
     return this.service.findAll();
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() training: Training) {
+    if (!validateId(id)) {
+      return errorOnValidate(`Id {${id}} is not valid.`);
+    }
+
+    return this.service.update(Number(id), training);
   }
 }
