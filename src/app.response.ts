@@ -18,12 +18,12 @@ enum Code {
 
 enum Text {
   BadRequest = 'Bad request.',
-  Created = 'Successfully created.',
-  Found = 'Successfully found.',
-  NotCreated = 'Error on create.',
-  NotFound = 'Error on find.',
-  NotUpdated = 'Error on update.',
-  Updated = 'Success on update.',
+  Created = 'Resource created.',
+  Found = 'Resource found.',
+  Updated = 'Resource updated.',
+  NotCreated = 'Fail to create resource.',
+  NotFound = 'Fail to find resource.',
+  NotUpdated = 'Fail to update resource.',
 }
 
 export function errorOnCreate(error: PrismaClientUnknownRequestError) {
