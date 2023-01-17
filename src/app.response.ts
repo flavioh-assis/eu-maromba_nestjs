@@ -12,10 +12,12 @@ enum Code {
   Ok = 200,
   Created = 201,
   NoContent = 204,
+  BadRequest = 400,
   InternalErrorServer = 500,
 }
 
 enum Text {
+  BadRequest = 'Bad request.',
   Created = 'Successfully created.',
   Found = 'Successfully found.',
   NotCreated = 'Error on create.',
@@ -33,6 +35,15 @@ export function errorOnCreate(error: PrismaClientUnknownRequestError) {
   } as RequestResponse;
 }
 
+export function errorOnFind(error: PrismaClientUnknownRequestError) {
+  return {
+    success: false,
+    statusCode: Code.InternalErrorServer,
+    statusText: `${Text.NotFound} ${error.message}`,
+    data: [],
+  } as RequestResponse;
+}
+
 export function errorOnUpdate(error: PrismaClientUnknownRequestError) {
   return {
     success: false,
@@ -42,11 +53,11 @@ export function errorOnUpdate(error: PrismaClientUnknownRequestError) {
   } as RequestResponse;
 }
 
-export function errorOnFind(error: PrismaClientUnknownRequestError) {
+export function errorOnValidate(error: string) {
   return {
     success: false,
-    statusCode: Code.InternalErrorServer,
-    statusText: `${Text.NotFound} ${error.message}`,
+    statusCode: Code.BadRequest,
+    statusText: `${Text.BadRequest} ${error}`,
     data: [],
   } as RequestResponse;
 }
