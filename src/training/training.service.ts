@@ -4,8 +4,10 @@ import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import {
   errorOnCreate,
   errorOnFind,
+  errorOnUpdate,
   successOnCreate,
   successOnFind,
+  successOnUpdate,
 } from 'src/app.response';
 
 const prisma = new PrismaClient();
@@ -37,6 +39,31 @@ export class TrainingService {
       console.log(error);
 
       return errorOnFind(error as PrismaClientUnknownRequestError);
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  async update(id: number, training: Training) {
+    try {
+      const response = await prisma.training.update({
+        where: {
+          id,
+        },
+        data: {
+          obs: training.obs,
+          reps: training.reps,
+          restTime: training.restTime,
+          sets: training.sets,
+          workoutSheetId: training.workoutSheetId,
+        },
+      });
+
+      return successOnUpdate(response);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnUpdate(error as PrismaClientUnknownRequestError);
     } finally {
       await prisma.$disconnect();
     }
