@@ -6,7 +6,7 @@ import {
   errorOnFind,
   errorOnUpdate,
   successOnCreate,
-  successOnFind,
+  successOnFindMany,
   successOnUpdate,
 } from 'src/app.response';
 
@@ -20,7 +20,7 @@ export class TrainingService {
         data: training,
       });
 
-      return successOnCreate([response]);
+      return successOnCreate(response);
     } catch (error) {
       console.log(error);
 
@@ -34,7 +34,7 @@ export class TrainingService {
     try {
       const response = await prisma.training.findMany();
 
-      return successOnFind(response);
+      return successOnFindMany(response);
     } catch (error) {
       console.log(error);
 

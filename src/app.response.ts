@@ -62,18 +62,25 @@ export function errorOnValidate(error: string) {
   } as RequestResponse;
 }
 
-export function successOnCreate(
-  data: Exercise[] | MuscleGroup[] | Training[] | WorkoutSheet[]
-) {
+export function successOnCreate(data: Exercise | Training | WorkoutSheet) {
   return {
     success: true,
     statusCode: Code.Created,
     statusText: Text.Created,
-    data,
+    data: [data],
   } as RequestResponse;
 }
 
-export function successOnFind(
+export function successOnFindOne(data: Exercise | MuscleGroup | Training | WorkoutSheet) {
+  return {
+    success: true,
+    statusCode: Code.Ok,
+    statusText: Text.Found,
+    data: [data],
+  } as RequestResponse;
+}
+
+export function successOnFindMany(
   data: Exercise[] | MuscleGroup[] | Training[] | WorkoutSheet[]
 ) {
   return {
