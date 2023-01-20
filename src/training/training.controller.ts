@@ -18,6 +18,15 @@ export class TrainingController {
     return this.service.findAll();
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    if (!validateId(id)) {
+      return errorOnValidate(`Id {${id}} is not valid.`);
+    }
+
+    return this.service.findOne(Number(id));
+  }
+
   @Put(':id')
   async update(@Param('id') id: string, @Body() training: Training) {
     if (!validateId(id)) {
