@@ -3,9 +3,11 @@ import { PrismaClient, Training } from '@prisma/client';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import {
   errorOnCreate,
+  errorOnDelete,
   errorOnFind,
   errorOnUpdate,
   successOnCreate,
+  successOnDelete,
   successOnFindMany,
   successOnUpdate,
 } from 'src/app.response';
@@ -64,6 +66,24 @@ export class TrainingService {
       console.log(error);
 
       return errorOnUpdate(error as PrismaClientUnknownRequestError);
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  async delete(id: number) {
+    try {
+      const response = await prisma.training.delete({
+        where: {
+          id,
+        },
+      });
+
+      return successOnDelete(response);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnDelete(error as PrismaClientUnknownRequestError);
     } finally {
       await prisma.$disconnect();
     }
