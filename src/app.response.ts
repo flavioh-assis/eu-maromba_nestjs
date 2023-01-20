@@ -19,9 +19,11 @@ enum Code {
 enum Text {
   BadRequest = 'Bad request.',
   Created = 'Resource created.',
+  Deleted = 'Resource deleted.',
   Found = 'Resource found.',
   Updated = 'Resource updated.',
   NotCreated = 'Fail to create resource.',
+  NotDeleted = 'Fail to delete resource.',
   NotFound = 'Fail to find resource.',
   NotUpdated = 'Fail to update resource.',
 }
@@ -31,6 +33,15 @@ export function errorOnCreate(error: PrismaClientUnknownRequestError) {
     success: false,
     statusCode: Code.InternalErrorServer,
     statusText: `${Text.NotCreated} ${error.message}`,
+    data: [],
+  } as RequestResponse;
+}
+
+export function errorOnDelete(error: PrismaClientUnknownRequestError) {
+  return {
+    success: false,
+    statusCode: Code.InternalErrorServer,
+    statusText: `${Text.NotDeleted} ${error.message}`,
     data: [],
   } as RequestResponse;
 }
@@ -67,6 +78,15 @@ export function successOnCreate(data: Exercise | Training | WorkoutSheet) {
     success: true,
     statusCode: Code.Created,
     statusText: Text.Created,
+    data: [data],
+  } as RequestResponse;
+}
+
+export function successOnDelete(data: Exercise | Training | WorkoutSheet) {
+  return {
+    success: true,
+    statusCode: Code.NoContent,
+    statusText: Text.Deleted,
     data: [data],
   } as RequestResponse;
 }
