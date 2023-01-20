@@ -3,9 +3,11 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import {
   errorOnCreate,
+  errorOnDelete,
   errorOnFind,
   errorOnUpdate,
   successOnCreate,
+  successOnDelete,
   successOnFindMany,
   successOnUpdate,
 } from 'src/app.response';
@@ -50,7 +52,7 @@ export class WorkoutSheetService {
     try {
       const response = await prisma.workoutSheet.update({
         where: {
-          id: Number(id),
+          id,
         },
         data: {
           name,
@@ -62,6 +64,24 @@ export class WorkoutSheetService {
       console.log(error);
 
       return errorOnUpdate(error as PrismaClientUnknownRequestError);
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  async delete(id: number) {
+    try {
+      const response = await prisma.workoutSheet.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      return successOnDelete(response);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnDelete(error as PrismaClientUnknownRequestError);
     } finally {
       await prisma.$disconnect();
     }
