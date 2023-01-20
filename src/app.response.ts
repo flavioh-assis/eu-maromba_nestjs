@@ -22,6 +22,7 @@ enum Text {
   Deleted = 'Resource deleted.',
   Found = 'Resource found.',
   Updated = 'Resource updated.',
+  NothingFound = 'No resource found.',
   NotCreated = 'Fail to create resource.',
   NotDeleted = 'Fail to delete resource.',
   NotFound = 'Fail to find resource.',
@@ -91,12 +92,14 @@ export function successOnDelete(data: Exercise | Training | WorkoutSheet) {
   } as RequestResponse;
 }
 
-export function successOnFindOne(data: Exercise | MuscleGroup | Training | WorkoutSheet) {
+export function successOnFindOne(
+  data: Exercise | MuscleGroup | Training | WorkoutSheet | null
+) {
   return {
     success: true,
-    statusCode: Code.Ok,
-    statusText: Text.Found,
-    data: [data],
+    statusCode: data ? Code.Ok : Code.NoContent,
+    statusText: data ? Text.Found : Text.NothingFound,
+    data: data ? [data] : [],
   } as RequestResponse;
 }
 
@@ -105,8 +108,8 @@ export function successOnFindMany(
 ) {
   return {
     success: true,
-    statusCode: Code.Ok,
-    statusText: Text.Found,
+    statusCode: data.length ? Code.Ok : Code.NoContent,
+    statusText: data.length ? Text.Found : Text.NothingFound,
     data,
   } as RequestResponse;
 }
