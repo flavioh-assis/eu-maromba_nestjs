@@ -1,3 +1,3 @@
-export function validateId(id: unknown) {
+export function validateId(id: string) {
   return Number(id) > 0;
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { errorOnValidate } from 'src/app.response';
 import { validateId } from 'src/app.validator';
 import { WorkoutSheetService } from './workoutSheet.service';
@@ -8,7 +8,6 @@ export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 
   @Post()
-  @HttpCode(201)
   async create(@Body('name') name: string) {
     return this.service.create(name);
   }
@@ -19,9 +18,20 @@ export class WorkoutSheetController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body('name') name: string) {
-    if (!validateId(id)) return errorOnValidate(`Id {${id}} is not valid.`);
+  async update(@Param('id') id: string, @Body('name') name: string) {
+    if (!validateId(id)) {
+      return errorOnValidate(`Id {${id}} is not valid.`);
+    }
 
-    return this.service.update(id, name);
+    return this.service.update(Number(id), name);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    if (!validateId(id)) {
+      return errorOnValidate(`Id {${id}} is not valid.`);
+    }
+
+    return this.service.delete(Number(id));
   }
 }
