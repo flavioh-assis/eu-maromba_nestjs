@@ -9,6 +9,7 @@ import {
   successOnCreate,
   successOnDelete,
   successOnFindMany,
+  successOnFindOne,
   successOnUpdate,
 } from 'src/app.response';
 
@@ -37,6 +38,24 @@ export class TrainingService {
       const response = await prisma.training.findMany();
 
       return successOnFindMany(response);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnFind(error as PrismaClientUnknownRequestError);
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  async findOne(id: number) {
+    try {
+      const response = await prisma.training.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      return successOnFindOne(response);
     } catch (error) {
       console.log(error);
 
