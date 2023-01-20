@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Training } from '@prisma/client';
 import { errorOnValidate } from 'src/app.response';
 import { validateId } from 'src/app.validator';
@@ -25,5 +25,14 @@ export class TrainingController {
     }
 
     return this.service.update(Number(id), training);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    if (!validateId(id)) {
+      return errorOnValidate(`Id {${id}} is not valid.`);
+    }
+
+    return this.service.delete(Number(id));
   }
 }
