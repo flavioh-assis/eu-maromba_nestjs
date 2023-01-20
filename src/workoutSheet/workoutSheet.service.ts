@@ -9,6 +9,7 @@ import {
   successOnCreate,
   successOnDelete,
   successOnFindMany,
+  successOnFindOne,
   successOnUpdate,
 } from 'src/app.response';
 
@@ -39,6 +40,24 @@ export class WorkoutSheetService {
       const response = await prisma.workoutSheet.findMany();
 
       return successOnFindMany(response);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnFind(error as PrismaClientUnknownRequestError);
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+
+  async findOne(id: number) {
+    try {
+      const response = await prisma.workoutSheet.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      return successOnFindOne(response);
     } catch (error) {
       console.log(error);
 
