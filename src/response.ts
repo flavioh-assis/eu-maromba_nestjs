@@ -1,12 +1,11 @@
-import { Exercise, MuscleGroup, Training, WorkoutSheet } from '@prisma/client';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
-
-type RequestResponse = {
-  success: boolean;
-  statusCode: number;
-  statusText: string;
-  data: Exercise[] | MuscleGroup[] | Training[] | WorkoutSheet[];
-};
+import {
+  ExerciseResponse,
+  MuscleGroupResponse,
+  RequestResponse,
+  TrainingResponse,
+  WorkoutSheetResponse,
+} from './type';
 
 enum Code {
   Ok = 200,
@@ -74,7 +73,9 @@ export function errorOnValidate(error: string) {
   } as RequestResponse;
 }
 
-export function successOnCreate(data: Exercise | Training | WorkoutSheet) {
+export function successOnCreate(
+  data: ExerciseResponse | TrainingResponse | WorkoutSheetResponse
+) {
   return {
     success: true,
     statusCode: Code.Created,
@@ -83,7 +84,9 @@ export function successOnCreate(data: Exercise | Training | WorkoutSheet) {
   } as RequestResponse;
 }
 
-export function successOnDelete(data: Exercise | Training | WorkoutSheet) {
+export function successOnDelete(
+  data: ExerciseResponse | TrainingResponse | WorkoutSheetResponse
+) {
   return {
     success: true,
     statusCode: Code.NoContent,
@@ -93,7 +96,12 @@ export function successOnDelete(data: Exercise | Training | WorkoutSheet) {
 }
 
 export function successOnFindOne(
-  data: Exercise | MuscleGroup | Training | WorkoutSheet | null
+  data:
+    | ExerciseResponse
+    | MuscleGroupResponse
+    | TrainingResponse
+    | WorkoutSheetResponse
+    | null
 ) {
   return {
     success: true,
@@ -104,7 +112,11 @@ export function successOnFindOne(
 }
 
 export function successOnFindMany(
-  data: Exercise[] | MuscleGroup[] | Training[] | WorkoutSheet[]
+  data:
+    | ExerciseResponse[]
+    | MuscleGroupResponse[]
+    | TrainingResponse[]
+    | WorkoutSheetResponse[]
 ) {
   return {
     success: true,
@@ -114,7 +126,9 @@ export function successOnFindMany(
   } as RequestResponse;
 }
 
-export function successOnUpdate(data: Exercise | Training | WorkoutSheet) {
+export function successOnUpdate(
+  data: ExerciseResponse | TrainingResponse | WorkoutSheetResponse
+) {
   return {
     success: true,
     statusCode: Code.NoContent,
