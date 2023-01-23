@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
-import { successOnFindMany, errorOnFind } from 'src/app.response';
+import { successOnFindMany, errorOnFind } from 'src/response';
 import { MuscleGroupService } from './muscleGroup.service';
 
 @Controller('api/muscle-groups')
