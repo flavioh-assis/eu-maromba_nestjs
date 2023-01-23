@@ -1,7 +1,7 @@
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
+import { MuscleGroupResponse } from './muscleGroup/type/muscleGroup.response';
 import {
   ExerciseResponse,
-  MuscleGroupResponse,
   RequestResponse,
   TrainingResponse,
   WorkoutSheetResponse,

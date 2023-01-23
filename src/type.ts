@@ -1,3 +1,5 @@
+import { MuscleGroupResponse } from './muscleGroup/type/muscleGroup.response';
+
 export type RequestResponse = {
   success: boolean;
   statusCode: number;
@@ -13,11 +15,6 @@ export type ExerciseResponse = {
   id: number;
   name: string;
   muscleGroup: { id: number };
-};
-
-export type MuscleGroupResponse = {
-  id: number;
-  name: string;
 };
 
 export type TrainingResponse = {
