@@ -1,23 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
-import { errorOnFind, successOnFindMany } from 'src/app.response';
 
 const prisma = new PrismaClient();
 
 @Injectable()
 export class MuscleGroupService {
   async findAll() {
-    try {
-      const response = await prisma.muscleGroup.findMany();
+    const muscleGroups = await prisma.muscleGroup.findMany();
 
-      return successOnFindMany(response);
-    } catch (error) {
-      console.log(error);
+    await prisma.$disconnect();
 
-      return errorOnFind(error as PrismaClientUnknownRequestError);
-    } finally {
-      await prisma.$disconnect();
-    }
+    return muscleGroups;
   }
 }

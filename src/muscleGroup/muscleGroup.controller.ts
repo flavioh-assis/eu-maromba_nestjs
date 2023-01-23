@@ -1,4 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
+import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
+import { successOnFindMany, errorOnFind } from 'src/app.response';
 import { MuscleGroupService } from './muscleGroup.service';
 
 @Controller('api/muscle-groups')
@@ -7,6 +9,14 @@ export class MuscleGroupController {
 
   @Get()
   async findAll() {
-    return this.service.findAll();
+    try {
+      const response = await this.service.findAll();
+
+      return successOnFindMany(response);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnFind(error as PrismaClientUnknownRequestError);
+    }
   }
 }
