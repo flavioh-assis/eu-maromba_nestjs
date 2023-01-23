@@ -1,4 +1,5 @@
 import { MuscleGroupResponse } from './muscleGroup/type/muscleGroup.response';
+import { TrainingResponse } from './training/type/training.response';
 
 export type RequestResponse = {
   success: boolean;
@@ -15,22 +16,6 @@ export type ExerciseResponse = {
   id: number;
   name: string;
   muscleGroup: { id: number };
-};
-
-export type TrainingResponse = {
-  id: number;
-  exercise: {
-    id: number;
-    name: string;
-  };
-  workoutSheet: {
-    id: number;
-    name: string;
-  };
-  sets: string;
-  reps: string;
-  restTime: string;
-  obs: string;
 };
 
 export type WorkoutSheetResponse = {
