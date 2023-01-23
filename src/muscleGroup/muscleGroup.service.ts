@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from 'src/db.connection';
 
 @Injectable()
 export class MuscleGroupService {
   async findAll() {
-    const muscleGroups = await prisma.muscleGroup.findMany();
-
-    await prisma.$disconnect();
+    const muscleGroups = await db.muscleGroup.findMany();
 
     return muscleGroups;
   }
