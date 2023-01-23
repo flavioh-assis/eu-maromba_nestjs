@@ -1,8 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
-import { errorOnCreate, errorOnValidate, successOnCreate } from 'src/response';
+import {
+  errorOnCreate,
+  errorOnDelete,
+  errorOnFind,
+  errorOnUpdate,
+  errorOnValidate,
+  successOnCreate,
+  successOnDelete,
+  successOnFindMany,
+  successOnFindOne,
+  successOnUpdate,
+} from 'src/response';
 import { validateId } from 'src/validator';
-import { mapTraining } from './training.mapper';
+import { mapTrainingEdit, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
 import { CreateTrainingRequest, EditTrainingRequest } from './type/training.request';
 
@@ -13,7 +24,7 @@ export class TrainingController {
   @Post()
   async create(@Body() training: CreateTrainingRequest) {
     try {
-      const mappedTraining = mapTraining(training);
+      const mappedTraining = mapTrainingCreate(training);
 
       const dbResult = await this.service.create(mappedTraining);
 
@@ -21,13 +32,21 @@ export class TrainingController {
     } catch (error) {
       console.log(error);
 
-      errorOnCreate(error as PrismaClientUnknownRequestError);
+      return errorOnCreate(error as PrismaClientUnknownRequestError);
     }
   }
 
   @Get()
   async findAll() {
-    return this.service.findAll();
+    try {
+      const dbResult = await this.service.findAll();
+
+      return successOnFindMany(dbResult);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnFind(error as PrismaClientUnknownRequestError);
+    }
   }
 
   @Get(':id')
@@ -36,16 +55,34 @@ export class TrainingController {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }
 
-    return this.service.findOne(Number(id));
+    try {
+      const dbResult = await this.service.findOne(Number(id));
+
+      return successOnFindOne(dbResult);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnFind(error as PrismaClientUnknownRequestError);
+    }
   }
 
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() training: EditTrainingDto) {
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() training: EditTrainingRequest) {
     if (!validateId(id)) {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }
 
-    return this.service.update(Number(id), training);
+    try {
+      const mappedTraining = mapTrainingEdit(training);
+
+      const dbResult = await this.service.update(+id, mappedTraining);
+
+      return successOnUpdate(dbResult);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnUpdate(error as PrismaClientUnknownRequestError);
+    }
   }
 
   @Delete(':id')
@@ -54,6 +91,14 @@ export class TrainingController {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }
 
-    return this.service.delete(Number(id));
+    try {
+      const dbResult = await this.service.delete(Number(id));
+
+      return successOnDelete(dbResult);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnDelete(error as PrismaClientUnknownRequestError);
+    }
   }
 }
