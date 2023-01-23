@@ -1,36 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, Training } from '@prisma/client';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
+import { db } from 'src/db.connection';
 import {
-  errorOnCreate,
   errorOnDelete,
   errorOnFind,
   errorOnUpdate,
-  successOnCreate,
   successOnDelete,
   successOnFindMany,
   successOnFindOne,
   successOnUpdate,
-} from 'src/app.response';
+} from 'src/response';
+import { prismaSelectTrainingResponse } from './training.constant';
+import { TrainingResponse } from './type/training.response';
 
 const prisma = new PrismaClient();
 
+interface ITrainingService {
+  create: (training: Training) => Promise<TrainingResponse>;
+}
+
 @Injectable()
-export class TrainingService {
+export class TrainingService implements ITrainingService {
   async create(training: Training) {
-    try {
-      const response = await prisma.training.create({
-        data: training,
-      });
+    const dbResult = await db.training.create({
+      data: training,
+      select: prismaSelectTrainingResponse,
+    });
 
-      return successOnCreate(response);
-    } catch (error) {
-      console.log(error);
-
-      return errorOnCreate(error as PrismaClientUnknownRequestError);
-    } finally {
-      await prisma.$disconnect();
-    }
+    return dbResult as TrainingResponse;
   }
 
   async findAll() {
