@@ -1,16 +1,28 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { Training } from '@prisma/client';
-import { errorOnValidate } from 'src/app.response';
-import { validateId } from 'src/app.validator';
+import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
+import { errorOnCreate, errorOnValidate, successOnCreate } from 'src/response';
+import { validateId } from 'src/validator';
+import { mapTraining } from './training.mapper';
 import { TrainingService } from './training.service';
+import { CreateTrainingRequest, EditTrainingRequest } from './type/training.request';
 
 @Controller('api/trainings')
 export class TrainingController {
   constructor(private readonly service: TrainingService) {}
 
   @Post()
-  async create(@Body() training: Training) {
-    return this.service.create(training);
+  async create(@Body() training: CreateTrainingRequest) {
+    try {
+      const mappedTraining = mapTraining(training);
+
+      const dbResult = await this.service.create(mappedTraining);
+
+      return successOnCreate(dbResult);
+    } catch (error) {
+      console.log(error);
+
+      errorOnCreate(error as PrismaClientUnknownRequestError);
+    }
   }
 
   @Get()
@@ -28,7 +40,7 @@ export class TrainingController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() training: Training) {
+  async update(@Param('id') id: string, @Body() training: EditTrainingDto) {
     if (!validateId(id)) {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }
