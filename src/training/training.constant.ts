@@ -1,4 +1,4 @@
-export const prismaSelectTrainingResponse = {
+export const selectTrainingResponse = {
   id: true,
   exercise: {
     select: {
