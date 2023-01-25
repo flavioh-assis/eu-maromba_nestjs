@@ -1,83 +1,62 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import { db } from 'src/db.connection';
-import {
-  errorOnDelete,
-  errorOnFind,
-  errorOnUpdate,
-  successOnDelete,
-  successOnFindOne,
-  successOnUpdate,
-} from 'src/response';
+import { WorkoutSheetResponse } from './type/workoutSheet.response';
+import { selectWorkoutResponse } from './workoutSheet.constant';
 
 @Injectable()
 export class WorkoutSheetService {
   async create(name: string) {
-    return await db.workoutSheet.create({
+    const dbResult = await db.workoutSheet.create({
       data: {
         name,
       },
+      select: selectWorkoutResponse,
     });
+
+    return dbResult as WorkoutSheetResponse;
   }
 
   async findAll() {
-    return await db.workoutSheet.findMany();
+    const dbResult = await db.workoutSheet.findMany({
+      select: selectWorkoutResponse,
+    });
+
+    return dbResult as WorkoutSheetResponse[];
   }
 
   async findOne(id: number) {
-    try {
-      const response = await db.workoutSheet.findUnique({
-        where: {
-          id,
-        },
-      });
+    const dbResult = await db.workoutSheet.findUnique({
+      where: {
+        id,
+      },
+      select: selectWorkoutResponse,
+    });
 
-      return successOnFindOne(response);
-    } catch (error) {
-      console.log(error);
-
-      return errorOnFind(error as PrismaClientUnknownRequestError);
-    } finally {
-      await db.$disconnect();
-    }
+    return dbResult as WorkoutSheetResponse;
   }
 
   async update(id: number, name: string) {
-    try {
-      const response = await db.workoutSheet.update({
-        where: {
-          id,
-        },
-        data: {
-          name,
-        },
-      });
+    const dbResult = await db.workoutSheet.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+      select: selectWorkoutResponse,
+    });
 
-      return successOnUpdate(response);
-    } catch (error) {
-      console.log(error);
-
-      return errorOnUpdate(error as PrismaClientUnknownRequestError);
-    } finally {
-      await db.$disconnect();
-    }
+    return dbResult as WorkoutSheetResponse;
   }
 
   async delete(id: number) {
-    try {
-      const response = await db.workoutSheet.delete({
-        where: {
-          id: id,
-        },
-      });
+    const dbResult = await db.workoutSheet.delete({
+      where: {
+        id: id,
+      },
+      select: selectWorkoutResponse,
+    });
 
-      return successOnDelete(response);
-    } catch (error) {
-      console.log(error);
-
-      return errorOnDelete(error as PrismaClientUnknownRequestError);
-    } finally {
-      await db.$disconnect();
-    }
+    return dbResult as WorkoutSheetResponse;
   }
 }
