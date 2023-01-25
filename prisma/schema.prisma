@@ -8,9 +8,9 @@ datasource db {
 }
 
 model MuscleGroup {
-  id       Int        @id
-  name     String     @db.VarChar(30)
-  Exercise Exercise[]
+  id        Int        @id
+  name      String     @db.VarChar(30)
+  exercises Exercise[]
 }
 
 model Exercise {
@@ -18,13 +18,13 @@ model Exercise {
   name          String      @db.VarChar(50)
   muscleGroup   MuscleGroup @relation(references: [id], fields: [muscleGroupId])
   muscleGroupId Int
-  Training      Training[]
+  trainings     Training[]
 }
 
 model WorkoutSheet {
-  id       Int        @id @default(autoincrement())
-  name     String     @db.VarChar(30)
-  Training Training[]
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(30)
+  trainings Training[]
 }
 
 model Training {
