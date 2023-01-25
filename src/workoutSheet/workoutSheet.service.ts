@@ -1,57 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
+import { db } from 'src/db.connection';
 import {
-  errorOnCreate,
   errorOnDelete,
   errorOnFind,
   errorOnUpdate,
-  successOnCreate,
   successOnDelete,
-  successOnFindMany,
   successOnFindOne,
   successOnUpdate,
-} from 'src/app.response';
-
-const prisma = new PrismaClient();
+} from 'src/response';
 
 @Injectable()
 export class WorkoutSheetService {
   async create(name: string) {
-    try {
-      const response = await prisma.workoutSheet.create({
-        data: {
-          name,
-        },
-      });
-
-      return successOnCreate(response);
-    } catch (error) {
-      console.log(error);
-
-      return errorOnCreate(error as PrismaClientUnknownRequestError);
-    } finally {
-      await prisma.$disconnect();
-    }
+    return await db.workoutSheet.create({
+      data: {
+        name,
+      },
+    });
   }
 
   async findAll() {
-    try {
-      const response = await prisma.workoutSheet.findMany();
-
-      return successOnFindMany(response);
-    } catch (error) {
-      console.log(error);
-
-      return errorOnFind(error as PrismaClientUnknownRequestError);
-    } finally {
-      await prisma.$disconnect();
-    }
+    return await db.workoutSheet.findMany();
   }
 
   async findOne(id: number) {
     try {
-      const response = await prisma.workoutSheet.findUnique({
+      const response = await db.workoutSheet.findUnique({
         where: {
           id,
         },
@@ -63,13 +38,13 @@ export class WorkoutSheetService {
 
       return errorOnFind(error as PrismaClientUnknownRequestError);
     } finally {
-      await prisma.$disconnect();
+      await db.$disconnect();
     }
   }
 
   async update(id: number, name: string) {
     try {
-      const response = await prisma.workoutSheet.update({
+      const response = await db.workoutSheet.update({
         where: {
           id,
         },
@@ -84,13 +59,13 @@ export class WorkoutSheetService {
 
       return errorOnUpdate(error as PrismaClientUnknownRequestError);
     } finally {
-      await prisma.$disconnect();
+      await db.$disconnect();
     }
   }
 
   async delete(id: number) {
     try {
-      const response = await prisma.workoutSheet.delete({
+      const response = await db.workoutSheet.delete({
         where: {
           id: id,
         },
@@ -102,7 +77,7 @@ export class WorkoutSheetService {
 
       return errorOnDelete(error as PrismaClientUnknownRequestError);
     } finally {
-      await prisma.$disconnect();
+      await db.$disconnect();
     }
   }
 }
