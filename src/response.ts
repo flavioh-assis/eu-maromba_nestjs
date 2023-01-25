@@ -1,7 +1,8 @@
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import { MuscleGroupResponse } from './muscleGroup/type/muscleGroup.response';
 import { TrainingResponse } from './training/type/training.response';
-import { ExerciseResponse, RequestResponse, WorkoutSheetResponse } from './type';
+import { ExerciseResponse, RequestResponse } from './type';
+import { WorkoutSheetResponse } from './workoutSheet/type/workoutSheet.response';
 
 enum Code {
   Ok = 200,
