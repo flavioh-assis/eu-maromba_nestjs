@@ -1,20 +1,37 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { errorOnValidate } from 'src/app.response';
-import { validateId } from 'src/app.validator';
+import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
+import { errorOnFind, errorOnValidate, successOnFindMany } from 'src/response';
+import { TrainingService } from 'src/training/training.service';
+import { validateId } from 'src/validator';
+import { mapWorkoutSheetResponse } from './workoutSheet.mapper';
 import { WorkoutSheetService } from './workoutSheet.service';
 
 @Controller('api/workout-sheets')
 export class WorkoutSheetController {
-  constructor(private readonly service: WorkoutSheetService) {}
+  constructor(
+    private readonly workoutService: WorkoutSheetService,
+    private readonly trainingService: TrainingService
+  ) {}
 
   @Post()
   async create(@Body('name') name: string) {
-    return this.service.create(name);
+    return this.workoutService.create(name);
   }
 
   @Get()
   async findAll() {
-    return this.service.findAll();
+    try {
+      const workoutSheets = await this.workoutService.findAll();
+      const trainings = await this.trainingService.findAll();
+
+      const workoutSheetResponse = mapWorkoutSheetResponse(workoutSheets, trainings);
+
+      return successOnFindMany(workoutSheetResponse);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnFind(error as PrismaClientUnknownRequestError);
+    }
   }
 
   @Get(':id')
@@ -23,7 +40,7 @@ export class WorkoutSheetController {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }
 
-    return this.service.findOne(Number(id));
+    return this.workoutService.findOne(Number(id));
   }
 
   @Put(':id')
@@ -32,7 +49,7 @@ export class WorkoutSheetController {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }
 
-    return this.service.update(Number(id), name);
+    return this.workoutService.update(Number(id), name);
   }
 
   @Delete(':id')
@@ -41,6 +58,6 @@ export class WorkoutSheetController {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }
 
-    return this.service.delete(Number(id));
+    return this.workoutService.delete(Number(id));
   }
 }
