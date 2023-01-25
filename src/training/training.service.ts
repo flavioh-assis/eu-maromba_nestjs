@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, Training } from '@prisma/client';
 import { db } from 'src/db.connection';
-import { prismaSelectTrainingResponse } from './training.constant';
+import { selectTrainingResponse } from './training.constant';
 import { TrainingResponse } from './type/training.response';
 
 const prisma = new PrismaClient();
@@ -19,7 +19,7 @@ export class TrainingService implements ITrainingService {
   async create(training: Training) {
     const dbResult = await db.training.create({
       data: training,
-      select: prismaSelectTrainingResponse,
+      select: selectTrainingResponse,
     });
 
     return dbResult as TrainingResponse;
@@ -27,7 +27,7 @@ export class TrainingService implements ITrainingService {
 
   async findAll() {
     const dbResult = await db.training.findMany({
-      select: prismaSelectTrainingResponse,
+      select: selectTrainingResponse,
     });
 
     return dbResult as TrainingResponse[];
@@ -38,7 +38,7 @@ export class TrainingService implements ITrainingService {
       where: {
         id,
       },
-      select: prismaSelectTrainingResponse,
+      select: selectTrainingResponse,
     });
 
     return dbResult as TrainingResponse;
@@ -50,7 +50,7 @@ export class TrainingService implements ITrainingService {
         id,
       },
       data: training,
-      select: prismaSelectTrainingResponse,
+      select: selectTrainingResponse,
     });
 
     return dbResult as TrainingResponse;
@@ -61,7 +61,7 @@ export class TrainingService implements ITrainingService {
       where: {
         id,
       },
-      select: prismaSelectTrainingResponse,
+      select: selectTrainingResponse,
     });
 
     return dbResult as TrainingResponse;
