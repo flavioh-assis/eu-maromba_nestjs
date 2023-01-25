@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import {
   errorOnCreate,
   errorOnDelete,
@@ -29,7 +28,7 @@ export class WorkoutSheetController {
     } catch (error) {
       console.log(error);
 
-      return errorOnCreate(error as PrismaClientUnknownRequestError);
+      return errorOnCreate(error);
     }
   }
 
@@ -42,7 +41,7 @@ export class WorkoutSheetController {
     } catch (error) {
       console.log(error);
 
-      return errorOnFind(error as PrismaClientUnknownRequestError);
+      return errorOnFind(error);
     }
   }
 
@@ -59,7 +58,7 @@ export class WorkoutSheetController {
     } catch (error) {
       console.log(error);
 
-      return errorOnFind(error as PrismaClientUnknownRequestError);
+      return errorOnFind(error);
     }
   }
 
@@ -76,7 +75,7 @@ export class WorkoutSheetController {
     } catch (error) {
       console.log(error);
 
-      return errorOnUpdate(error as PrismaClientUnknownRequestError);
+      return errorOnUpdate(error);
     }
   }
 
@@ -93,7 +92,7 @@ export class WorkoutSheetController {
     } catch (error) {
       console.log(error);
 
-      return errorOnDelete(error as PrismaClientUnknownRequestError);
+      return errorOnDelete(error);
     }
   }
 }

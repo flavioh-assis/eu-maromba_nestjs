@@ -25,38 +25,46 @@ enum Text {
   NotUpdated = 'Fail to update resource.',
 }
 
-export function errorOnCreate(error: PrismaClientUnknownRequestError) {
+export function errorOnCreate(error: unknown) {
+  const prismaError = error as PrismaClientUnknownRequestError;
+
   return {
     success: false,
     statusCode: Code.InternalErrorServer,
-    statusText: `${Text.NotCreated} ${error.message}`,
+    statusText: `${Text.NotCreated} ${prismaError.message}`,
     data: [],
   } as RequestResponse;
 }
 
-export function errorOnDelete(error: PrismaClientUnknownRequestError) {
+export function errorOnDelete(error: unknown) {
+  const prismaError = error as PrismaClientUnknownRequestError;
+
   return {
     success: false,
     statusCode: Code.InternalErrorServer,
-    statusText: `${Text.NotDeleted} ${error.message}`,
+    statusText: `${Text.NotDeleted} ${prismaError.message}`,
     data: [],
   } as RequestResponse;
 }
 
-export function errorOnFind(error: PrismaClientUnknownRequestError) {
+export function errorOnFind(error: unknown) {
+  const prismaError = error as PrismaClientUnknownRequestError;
+
   return {
     success: false,
     statusCode: Code.InternalErrorServer,
-    statusText: `${Text.NotFound} ${error.message}`,
+    statusText: `${Text.NotFound} ${prismaError.message}`,
     data: [],
   } as RequestResponse;
 }
 
-export function errorOnUpdate(error: PrismaClientUnknownRequestError) {
+export function errorOnUpdate(error: unknown) {
+  const prismaError = error as PrismaClientUnknownRequestError;
+
   return {
     success: false,
     statusCode: Code.InternalErrorServer,
-    statusText: `${Text.NotUpdated} ${error.message}`,
+    statusText: `${Text.NotUpdated} ${prismaError.message}`,
     data: [],
   } as RequestResponse;
 }
