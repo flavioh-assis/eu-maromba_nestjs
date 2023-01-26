@@ -1,9 +1,10 @@
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import { MuscleGroupResponse } from './muscleGroup/type/muscleGroup.response';
 import { TrainingResponse } from './training/type/training.response';
-import { ExerciseResponse, RequestResponse } from './type';
+import { RequestResponse } from './type';
 import { WorkoutSheetResponse } from './workoutSheet/type/workoutSheet.response';
 import { HttpStatus } from '@nestjs/common/enums';
+import { ExerciseResponse } from './exercise/type/exercise.response';
 
 enum Text {
   BAD_REQUEST = 'Bad request.',
