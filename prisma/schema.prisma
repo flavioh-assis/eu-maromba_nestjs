@@ -37,4 +37,5 @@ model Training {
   reps           Int
   restTime       Int
   obs            String       @default("") @db.VarChar(100)
+  position       Int
 }
