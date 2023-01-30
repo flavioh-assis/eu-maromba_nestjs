@@ -20,3 +20,8 @@ export type EditTrainingRequest = {
   restTime: number;
   obs: string;
 };
+
+export type ReorderTrainingRequest = {
+  id: number;
+  position: number;
+};
