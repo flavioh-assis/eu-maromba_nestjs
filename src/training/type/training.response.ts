@@ -12,4 +12,5 @@ export type TrainingResponse = {
   reps: number;
   restTime: number;
   obs: string;
+  position: number;
 };
