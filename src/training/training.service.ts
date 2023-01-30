@@ -1,21 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient, Training } from '@prisma/client';
+import { Training } from '@prisma/client';
 import { db } from 'src/db.connection';
 import { selectTrainingResponse } from './training.constant';
+import { ReorderTrainingRequest } from './type/training.request';
 import { TrainingResponse } from './type/training.response';
 
-const prisma = new PrismaClient();
-
-interface ITrainingService {
-  create: (training: Training) => Promise<TrainingResponse>;
-  findAll: () => Promise<TrainingResponse[]>;
-  findOne: (id: number) => Promise<TrainingResponse>;
-  update: (id: number, training: Training) => Promise<TrainingResponse>;
-  delete: (id: number) => Promise<TrainingResponse>;
-}
-
 @Injectable()
-export class TrainingService implements ITrainingService {
+export class TrainingService {
   async create(training: Training) {
     const dbResult = await db.training.create({
       data: training,
@@ -28,6 +19,11 @@ export class TrainingService implements ITrainingService {
   async findAll() {
     const dbResult = await db.training.findMany({
       select: selectTrainingResponse,
+      orderBy: [
+        {
+          position: 'asc',
+        },
+      ],
     });
 
     return dbResult as TrainingResponse[];
@@ -44,8 +40,27 @@ export class TrainingService implements ITrainingService {
     return dbResult as TrainingResponse;
   }
 
-  async update(id: number, training: Training) {
-    const dbResult = await prisma.training.update({
+  async findLastPosition(workoutSheetId: number) {
+    const dbResult = await db.training.findMany({
+      where: {
+        workoutSheetId,
+      },
+      select: {
+        position: true,
+      },
+      orderBy: [
+        {
+          position: 'desc',
+        },
+      ],
+      take: 1,
+    });
+
+    return dbResult.length ? dbResult[0].position : 0;
+  }
+
+  async update(id: number, training: Training | ReorderTrainingRequest) {
+    const dbResult = await db.training.update({
       where: {
         id,
       },
@@ -57,7 +72,7 @@ export class TrainingService implements ITrainingService {
   }
 
   async delete(id: number) {
-    const dbResult = await prisma.training.delete({
+    const dbResult = await db.training.delete({
       where: {
         id,
       },
