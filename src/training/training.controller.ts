@@ -15,7 +15,11 @@ import {
 import { validateId } from 'src/validator';
 import { mapTrainingEdit, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
-import { CreateTrainingRequest, EditTrainingRequest } from './type/training.request';
+import {
+  CreateTrainingRequest,
+  EditTrainingRequest,
+  ReorderTrainingRequest,
+} from './type/training.request';
 
 @Controller('api/trainings')
 export class TrainingController {
@@ -24,7 +28,9 @@ export class TrainingController {
   @Post()
   async create(@Body() training: CreateTrainingRequest) {
     try {
-      const mappedTraining = mapTrainingCreate(training);
+      const lastPosition = await this.service.findLastPosition(training.workoutSheet.id);
+
+      const mappedTraining = mapTrainingCreate(training, lastPosition + 1);
 
       const dbResult = await this.service.create(mappedTraining);
 
@@ -78,6 +84,25 @@ export class TrainingController {
       const dbResult = await this.service.update(+id, mappedTraining);
 
       return successOnUpdate(dbResult);
+    } catch (error) {
+      console.log(error);
+
+      return errorOnUpdate(error as PrismaClientUnknownRequestError);
+    }
+  }
+
+  @Patch()
+  async reorder(@Body() request: ReorderTrainingRequest[]) {
+    try {
+      const dbResult = await Promise.all(
+        request.map(async training => {
+          return await this.service.update(training.id, training);
+        })
+      );
+
+      const trainingsOrderedByPosition = dbResult.sort((a, b) => a.position - b.position);
+
+      return successOnUpdate(trainingsOrderedByPosition);
     } catch (error) {
       console.log(error);
 
