@@ -11,7 +11,7 @@ export function mapTrainingEdit(request: EditTrainingRequest) {
   } as Training;
 }
 
-export function mapTrainingCreate(request: CreateTrainingRequest) {
+export function mapTrainingCreate(request: CreateTrainingRequest, position: number) {
   return {
     exerciseId: request.exercise.id,
     workoutSheetId: request.workoutSheet.id,
@@ -19,5 +19,6 @@ export function mapTrainingCreate(request: CreateTrainingRequest) {
     reps: request.reps,
     restTime: request.restTime,
     obs: request.obs,
+    position: position,
   } as Training;
 }

@@ -16,4 +16,5 @@ export const selectTrainingResponse = {
   reps: true,
   restTime: true,
   obs: true,
+  position: true,
 };
