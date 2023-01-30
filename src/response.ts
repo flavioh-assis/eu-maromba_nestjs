@@ -126,7 +126,7 @@ export function successOnFindMany(
 }
 
 export function successOnUpdate(
-  data: ExerciseResponse | TrainingResponse | WorkoutSheetResponse
+  data: ExerciseResponse | TrainingResponse | TrainingResponse[] | WorkoutSheetResponse
 ) {
   return {
     success: true,
