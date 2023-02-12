@@ -86,9 +86,23 @@ export class TrainingController {
     }
 
     try {
+      const trainingInDB = await this.service.findOne(Number(id));
+
+      if (!trainingInDB) {
+        return errorOnUpdate({ message: 'Id not found.' });
+      }
+
       const mappedTraining = mapTrainingEdit(training);
 
-      const dbResult = await this.service.update(+id, mappedTraining);
+      if (trainingInDB.workoutSheet.id !== mappedTraining.workoutSheetId) {
+        const lastPositionInWorkoutSheet = await this.service.findLastPosition(
+          Number(training.workoutSheet.id)
+        );
+
+        mappedTraining.position = lastPositionInWorkoutSheet + 1;
+      }
+
+      const dbResult = await this.service.update(Number(id), mappedTraining);
 
       return successOnUpdate(dbResult);
     } catch (error) {
