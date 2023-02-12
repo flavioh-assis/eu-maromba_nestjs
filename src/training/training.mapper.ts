@@ -11,14 +11,18 @@ export function mapTrainingEdit(request: EditTrainingRequest) {
   } as Training;
 }
 
-export function mapTrainingCreate(request: CreateTrainingRequest, position: number) {
+export function mapTrainingCreate(
+  request: CreateTrainingRequest,
+  workoutSheetId: number,
+  position: number
+) {
   return {
     exerciseId: request.exercise.id,
-    workoutSheetId: request.workoutSheet.id,
     sets: request.sets,
     reps: request.reps,
     restTime: request.restTime,
     obs: request.obs,
-    position: position,
+    workoutSheetId,
+    position,
   } as Training;
 }
