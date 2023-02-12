@@ -16,8 +16,11 @@ export class TrainingService {
     return dbResult as TrainingResponse;
   }
 
-  async findAll() {
+  async findAll(workoutSheetId: number) {
     const dbResult = await db.training.findMany({
+      where: {
+        workoutSheetId,
+      },
       select: selectTrainingResponse,
       orderBy: [
         {
