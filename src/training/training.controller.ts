@@ -21,16 +21,23 @@ import {
   ReorderTrainingRequest,
 } from './type/training.request';
 
-@Controller('api/trainings')
+@Controller()
 export class TrainingController {
   constructor(private readonly service: TrainingService) {}
 
-  @Post()
-  async create(@Body() training: CreateTrainingRequest) {
+  @Post('workout-sheets/:workoutSheetId/trainings')
+  async create(
+    @Param('workoutSheetId') workoutSheetId: string,
+    @Body() training: CreateTrainingRequest
+  ) {
     try {
-      const lastPosition = await this.service.findLastPosition(training.workoutSheet.id);
+      const lastPosition = await this.service.findLastPosition(Number(workoutSheetId));
 
-      const mappedTraining = mapTrainingCreate(training, lastPosition + 1);
+      const mappedTraining = mapTrainingCreate(
+        training,
+        Number(workoutSheetId),
+        lastPosition + 1
+      );
 
       const dbResult = await this.service.create(mappedTraining);
 
@@ -42,10 +49,10 @@ export class TrainingController {
     }
   }
 
-  @Get()
-  async findAll() {
+  @Get('workout-sheets/:workoutSheetId/trainings')
+  async findAll(@Param('workoutSheetId') workoutSheetId: string) {
     try {
-      const dbResult = await this.service.findAll();
+      const dbResult = await this.service.findAll(Number(workoutSheetId));
 
       return successOnFindMany(dbResult);
     } catch (error) {
@@ -55,7 +62,7 @@ export class TrainingController {
     }
   }
 
-  @Get(':id')
+  @Get('trainings/:id')
   async findOne(@Param('id') id: string) {
     if (!validateId(id)) {
       return errorOnValidate(`Id {${id}} is not valid.`);
@@ -72,7 +79,7 @@ export class TrainingController {
     }
   }
 
-  @Patch(':id')
+  @Patch('trainings/:id')
   async update(@Param('id') id: string, @Body() training: EditTrainingRequest) {
     if (!validateId(id)) {
       return errorOnValidate(`Id {${id}} is not valid.`);
@@ -91,7 +98,7 @@ export class TrainingController {
     }
   }
 
-  @Patch()
+  @Patch('trainings')
   async reorder(@Body() request: ReorderTrainingRequest[]) {
     try {
       const dbResult = await Promise.all(
@@ -110,7 +117,7 @@ export class TrainingController {
     }
   }
 
-  @Delete(':id')
+  @Delete('trainings/:id')
   async delete(@Param('id') id: string) {
     if (!validateId(id)) {
       return errorOnValidate(`Id {${id}} is not valid.`);
