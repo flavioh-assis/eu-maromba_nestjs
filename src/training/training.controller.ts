@@ -25,9 +25,9 @@ import {
 export class TrainingController {
   constructor(private readonly service: TrainingService) {}
 
-  @Post('workout-sheets/:workoutSheetId/trainings')
+  @Post('workout-sheets/:id/trainings')
   async create(
-    @Param('workoutSheetId') workoutSheetId: string,
+    @Param('id') workoutSheetId: string,
     @Body() training: CreateTrainingRequest
   ) {
     try {
@@ -49,8 +49,8 @@ export class TrainingController {
     }
   }
 
-  @Get('workout-sheets/:workoutSheetId/trainings')
-  async findAll(@Param('workoutSheetId') workoutSheetId: string) {
+  @Get('workout-sheets/:id/trainings')
+  async findAll(@Param('id') workoutSheetId: string) {
     try {
       const dbResult = await this.service.findAll(Number(workoutSheetId));
 
