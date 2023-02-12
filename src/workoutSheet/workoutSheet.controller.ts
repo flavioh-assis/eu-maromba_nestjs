@@ -15,7 +15,7 @@ import { validateId } from 'src/validator';
 import { WorkoutSheetRequest } from './type/workoutSheet.request';
 import { WorkoutSheetService } from './workoutSheet.service';
 
-@Controller('api/workout-sheets')
+@Controller('workout-sheets')
 export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 

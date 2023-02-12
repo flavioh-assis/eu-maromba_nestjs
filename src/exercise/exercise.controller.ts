@@ -3,7 +3,7 @@ import { successOnFindMany, errorOnFind, errorOnValidate } from 'src/response';
 import { validateId } from 'src/validator';
 import { ExerciseService } from './exercise.service';
 
-@Controller('api/exercises')
+@Controller('exercises')
 export class ExerciseController {
   constructor(private readonly service: ExerciseService) {}
 

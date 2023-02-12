@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { successOnFindMany, errorOnFind } from 'src/response';
 import { MuscleGroupService } from './muscleGroup.service';
 
-@Controller('api/muscle-groups')
+@Controller('muscle-groups')
 export class MuscleGroupController {
   constructor(private readonly service: MuscleGroupService) {}
 
