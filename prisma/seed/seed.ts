@@ -1,11 +1,11 @@
 import { Exercise, MuscleGroup, PrismaClient } from '@prisma/client';
-import { exercises, muscleGroups } from './constant';
+import { exercises, muscleGroups } from '../seed/constant';
 
 const prisma = new PrismaClient();
 
 async function seed() {
-  seedMuscleGroups(muscleGroups);
-  seedExercises(exercises);
+  await seedMuscleGroups(muscleGroups);
+  await seedExercises(exercises);
 }
 
 async function seedMuscleGroups(muscleGroups: MuscleGroup[]) {
