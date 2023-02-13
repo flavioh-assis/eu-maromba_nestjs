@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Projeto para criação de treino de academia em NodeJS",
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed/seed.ts"
   },
   "scripts": {
     "build": "nest build",
@@ -19,7 +19,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed/seed.ts",
+    "migrate:dev": "npx prisma migrate dev && yarn seed"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
