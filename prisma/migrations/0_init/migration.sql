@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE `MuscleGroup` (
+CREATE TABLE IF NOT EXISTS `MuscleGroup` (
     `id` INTEGER NOT NULL,
     `name` VARCHAR(30) NOT NULL,
 
@@ -7,7 +7,7 @@ CREATE TABLE `MuscleGroup` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Exercise` (
+CREATE TABLE IF NOT EXISTS `Exercise` (
     `id` INTEGER NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `muscleGroupId` INTEGER NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE `Exercise` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Training` (
+CREATE TABLE IF NOT EXISTS `Training` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `exerciseId` INTEGER NOT NULL,
     `workoutSheetId` INTEGER NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `Training` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `WorkoutSheet` (
+CREATE TABLE IF NOT EXISTS `WorkoutSheet` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(30) NOT NULL,
 
