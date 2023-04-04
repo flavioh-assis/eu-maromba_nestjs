@@ -1,1 +1,0 @@
-ALTER TABLE `Training` ADD COLUMN `position` INTEGER NOT NULL;
