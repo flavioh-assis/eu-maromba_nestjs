@@ -26,7 +26,7 @@ export class WorkoutSheetController {
 
       return successOnCreate(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnCreate(error);
     }
@@ -39,7 +39,7 @@ export class WorkoutSheetController {
 
       return successOnFindMany(workoutSheets);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnFind(error);
     }
@@ -56,7 +56,7 @@ export class WorkoutSheetController {
 
       return successOnFindOne(workoutSheet);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnFind(error);
     }
@@ -73,7 +73,7 @@ export class WorkoutSheetController {
 
       return successOnUpdate(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnUpdate(error);
     }
@@ -90,7 +90,7 @@ export class WorkoutSheetController {
 
       return successOnDelete(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnDelete(error);
     }

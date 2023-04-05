@@ -13,7 +13,7 @@ export class MuscleGroupController {
 
       return successOnFindMany(muscleGroups);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnFind(error);
     }

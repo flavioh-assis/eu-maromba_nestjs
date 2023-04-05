@@ -43,7 +43,7 @@ export class TrainingController {
 
       return successOnCreate(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnCreate(error as PrismaClientUnknownRequestError);
     }
@@ -56,7 +56,7 @@ export class TrainingController {
 
       return successOnFindMany(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnFind(error as PrismaClientUnknownRequestError);
     }
@@ -73,7 +73,7 @@ export class TrainingController {
 
       return successOnFindOne(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnFind(error as PrismaClientUnknownRequestError);
     }
@@ -106,7 +106,7 @@ export class TrainingController {
 
       return successOnUpdate(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnUpdate(error as PrismaClientUnknownRequestError);
     }
@@ -125,7 +125,7 @@ export class TrainingController {
 
       return successOnUpdate(trainingsOrderedByPosition);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnUpdate(error as PrismaClientUnknownRequestError);
     }
@@ -142,7 +142,7 @@ export class TrainingController {
 
       return successOnDelete(dbResult);
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       return errorOnDelete(error as PrismaClientUnknownRequestError);
     }
