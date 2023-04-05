@@ -9,7 +9,6 @@ import {
 import { validateId } from 'src/validator';
 import { CreateWorkoutSheetDto, EditWorkoutSheetDto } from './type/workoutSheet.dto';
 import { WorkoutSheetService } from './workoutSheet.service';
-import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import { WorkoutSheet } from '@prisma/client';
 
 @Controller('workout-sheets')
@@ -17,8 +16,6 @@ export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 
   @Post()
-  @ApiCreatedResponse()
-  @ApiBadRequestResponse()
   async create(@Body() dto: CreateWorkoutSheetDto) {
     const lastPosition = await this.service.findLastPosition();
 
