@@ -1,5 +1,14 @@
-export type CreateWorkoutSheetDto = {
-  name: string;
-};
+import { Transform } from 'class-transformer';
+import { IsNotEmpty } from 'class-validator';
 
-export type EditWorkoutSheetDto = CreateWorkoutSheetDto;
+export class CreateWorkoutSheetDto {
+  @IsNotEmpty()
+  @Transform(({ value }) => String(value))
+  name: string;
+
+  constructor() {
+    this.name = '';
+  }
+}
+
+export class EditWorkoutSheetDto extends CreateWorkoutSheetDto {}
