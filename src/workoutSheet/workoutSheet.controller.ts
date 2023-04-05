@@ -5,26 +5,27 @@ import {
   errorOnFind,
   errorOnUpdate,
   errorOnValidate,
-  successOnCreate,
   successOnDelete,
   successOnFindMany,
-  successOnFindOne,
   successOnUpdate,
 } from 'src/response';
 import { validateId } from 'src/validator';
-import { WorkoutSheetRequest } from './type/workoutSheet.request';
+import { CreateWorkoutSheetDto, EditWorkoutSheetDto } from './type/workoutSheet.dto';
 import { WorkoutSheetService } from './workoutSheet.service';
+import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
 
 @Controller('workout-sheets')
 export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 
   @Post()
-  async create(@Body() request: WorkoutSheetRequest) {
+  @ApiCreatedResponse({ description: 'The workout sheet has been created.' })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  async create(@Body() dto: CreateWorkoutSheetDto) {
     try {
-      const dbResult = await this.service.create(request);
+      const dbResult = await this.service.create(dto);
 
-      return successOnCreate(dbResult);
+      return dbResult;
     } catch (error) {
       console.error(error);
 
@@ -45,25 +46,25 @@ export class WorkoutSheetController {
     }
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    if (!validateId(id)) {
-      return errorOnValidate(`Id {${id}} is not valid.`);
-    }
+  // @Get(':id')
+  // async findOne(@Param('id') id: string) {
+  //   if (!validateId(id)) {
+  //     return errorOnValidate(`Id {${id}} is not valid.`);
+  //   }
 
-    try {
-      const workoutSheet = await this.service.findOne(+id);
+  //   try {
+  //     const workoutSheet = await this.service.findOne(+id);
 
-      return successOnFindOne(workoutSheet);
-    } catch (error) {
-      console.error(error);
+  //     return successOnFindOne(workoutSheet);
+  //   } catch (error) {
+  //     console.error(error);
 
-      return errorOnFind(error);
-    }
-  }
+  //     return errorOnFind(error);
+  //   }
+  // }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() request: WorkoutSheetRequest) {
+  async update(@Param('id') id: string, @Body() request: EditWorkoutSheetDto) {
     if (!validateId(id)) {
       return errorOnValidate(`Id {${id}} is not valid.`);
     }

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'src/db.connection';
 import { selectTrainingResponse } from 'src/training/training.constant';
-import { WorkoutSheetRequest } from './type/workoutSheet.request';
+import { CreateWorkoutSheetDto, EditWorkoutSheetDto } from './type/workoutSheet.dto';
 import { WorkoutSheetResponse } from './type/workoutSheet.response';
 
 @Injectable()
 export class WorkoutSheetService {
-  async create(workoutSheet: WorkoutSheetRequest) {
+  async create(workoutSheet: CreateWorkoutSheetDto) {
     const dbResult = await db.workoutSheet.create({
       data: workoutSheet,
       select: {
@@ -61,7 +61,7 @@ export class WorkoutSheetService {
     return dbResult as WorkoutSheetResponse;
   }
 
-  async update(id: number, workoutSheet: WorkoutSheetRequest) {
+  async update(id: number, workoutSheet: EditWorkoutSheetDto) {
     const dbResult = await db.workoutSheet.update({
       where: {
         id,
