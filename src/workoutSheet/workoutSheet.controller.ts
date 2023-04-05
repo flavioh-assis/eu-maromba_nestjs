@@ -20,7 +20,7 @@ export class WorkoutSheetController {
 
   @Post()
   @ApiCreatedResponse({ description: 'The workout sheet has been created.' })
-  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiBadRequestResponse({ description: 'Bad request.' })
   async create(@Body() dto: CreateWorkoutSheetDto) {
     try {
       const dbResult = await this.service.create(dto);
