@@ -1,67 +1,39 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import {
-  errorOnCreate,
   errorOnDelete,
-  errorOnFind,
   errorOnUpdate,
   errorOnValidate,
   successOnDelete,
-  successOnFindMany,
   successOnUpdate,
 } from 'src/response';
 import { validateId } from 'src/validator';
 import { CreateWorkoutSheetDto, EditWorkoutSheetDto } from './type/workoutSheet.dto';
 import { WorkoutSheetService } from './workoutSheet.service';
 import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { WorkoutSheet } from '@prisma/client';
 
 @Controller('workout-sheets')
 export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 
   @Post()
-  @ApiCreatedResponse({ description: 'The workout sheet has been created.' })
-  @ApiBadRequestResponse({ description: 'Bad request.' })
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse()
   async create(@Body() dto: CreateWorkoutSheetDto) {
-    try {
-      const dbResult = await this.service.create(dto);
+    const lastPosition = await this.service.findLastPosition();
 
-      return dbResult;
-    } catch (error) {
-      console.error(error);
+    const newWorkoutSheet = {
+      ...dto,
+      position: lastPosition + 1,
+    } as WorkoutSheet;
 
-      return errorOnCreate(error);
-    }
+    return await this.service.create(newWorkoutSheet);
   }
 
   @Get()
   async findAll() {
-    try {
-      const workoutSheets = await this.service.findAll();
-
-      return successOnFindMany(workoutSheets);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnFind(error);
-    }
+    return await this.service.findAll();
   }
-
-  // @Get(':id')
-  // async findOne(@Param('id') id: string) {
-  //   if (!validateId(id)) {
-  //     return errorOnValidate(`Id {${id}} is not valid.`);
-  //   }
-
-  //   try {
-  //     const workoutSheet = await this.service.findOne(+id);
-
-  //     return successOnFindOne(workoutSheet);
-  //   } catch (error) {
-  //     console.error(error);
-
-  //     return errorOnFind(error);
-  //   }
-  // }
 
   @Put(':id')
   async update(@Param('id') id: string, @Body() request: EditWorkoutSheetDto) {
