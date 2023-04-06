@@ -9,7 +9,7 @@ import {
 import { validateId } from 'src/validator';
 import { CreateWorkoutSheetDto, EditWorkoutSheetDto } from './type/workoutSheet.dto';
 import { WorkoutSheetService } from './workoutSheet.service';
-import { WorkoutSheet } from '@prisma/client';
+import { WorkoutSheetBuilder } from './workoutSheet.builder';
 
 @Controller('workout-sheets')
 export class WorkoutSheetController {
@@ -19,10 +19,10 @@ export class WorkoutSheetController {
   async create(@Body() dto: CreateWorkoutSheetDto) {
     const lastPosition = await this.service.findLastPosition();
 
-    const newWorkoutSheet = {
-      ...dto,
-      position: lastPosition + 1,
-    } as WorkoutSheet;
+    const newWorkoutSheet = new WorkoutSheetBuilder()
+      .setName(dto.name)
+      .setPosition(lastPosition + 1)
+      .build();
 
     return await this.service.create(newWorkoutSheet);
   }
