@@ -1,21 +1,31 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import {
-  errorOnDelete,
-  errorOnUpdate,
-  errorOnValidate,
-  successOnDelete,
-  successOnUpdate,
-} from 'src/response';
-import { validateId } from 'src/validator';
-import { CreateWorkoutSheetDto, EditWorkoutSheetDto } from './type/workoutSheet.dto';
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  ParseArrayPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import {
+  CreateWorkoutSheetDto,
+  EditWorkoutSheetDto,
+  ReorderWorkoutSheetDto,
+} from './type/workoutSheet.dto';
 import { WorkoutSheetService } from './workoutSheet.service';
 import { WorkoutSheetBuilder } from './workoutSheet.builder';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Workout Sheet')
 @Controller('workout-sheets')
 export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 
   @Post()
+  @HttpCode(201)
   async create(@Body() dto: CreateWorkoutSheetDto) {
     const lastPosition = await this.service.findLastPosition();
 
@@ -28,41 +38,50 @@ export class WorkoutSheetController {
   }
 
   @Get()
+  @HttpCode(200)
   async findAll() {
     return await this.service.findAll();
   }
 
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() request: EditWorkoutSheetDto) {
-    if (!validateId(id)) {
-      return errorOnValidate(`Id {${id}} is not valid.`);
-    }
+  @Patch(':id')
+  @HttpCode(200)
+  async update(@Param('id') id: number, @Body() dto: EditWorkoutSheetDto) {
+    return await this.service.update(id, dto);
+  }
 
-    try {
-      const dbResult = await this.service.update(Number(id), request);
+  @Patch()
+  @HttpCode(200)
+  async reorder(
+    @Body(
+      new ParseArrayPipe({
+        items: ReorderWorkoutSheetDto,
+        whitelist: true,
+      })
+    )
+    dto: ReorderWorkoutSheetDto[]
+  ) {
+    const dbResult = await Promise.all(
+      dto.map(async ws => {
+        return await this.service.update(ws.id, ws);
+      })
+    );
 
-      return successOnUpdate(dbResult);
-    } catch (error) {
-      console.error(error);
+    const workoutSheetsOrderedByPosition = dbResult.sort(
+      (a, b) => a.position - b.position
+    );
 
-      return errorOnUpdate(error);
-    }
+    return workoutSheetsOrderedByPosition;
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    if (!validateId(id)) {
-      return errorOnValidate(`Id {${id}} is not valid.`);
+  @HttpCode(204)
+  async delete(@Param('id') id: number) {
+    const exist = await this.service.findOne(id);
+
+    if (!exist) {
+      return new BadRequestException("Workout sheet doesn't exist.");
     }
 
-    try {
-      const dbResult = await this.service.delete(Number(id));
-
-      return successOnDelete(dbResult);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnDelete(error);
-    }
+    await this.service.delete(id);
   }
 }
