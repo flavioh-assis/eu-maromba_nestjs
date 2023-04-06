@@ -1,28 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'src/db.connection';
-import { selectTrainingResponse } from 'src/training/training.constant';
-import { EditWorkoutSheetDto } from './type/workoutSheet.dto';
-import { WorkoutSheetResponse } from './type/workoutSheet.response';
+import { EditWorkoutSheetDto, ReorderWorkoutSheetDto } from './type/workoutSheet.dto';
 import { WorkoutSheet } from '@prisma/client';
 
 @Injectable()
 export class WorkoutSheetService {
   async create(workoutSheet: WorkoutSheet) {
-    const dbResult = await db.workoutSheet.create({
+    return await db.workoutSheet.create({
       data: workoutSheet,
     });
-
-    return dbResult as WorkoutSheetResponse;
   }
 
   async findAll() {
-    const dbResult = await db.workoutSheet.findMany({
+    return await db.workoutSheet.findMany({
       orderBy: {
         position: 'asc',
       },
     });
+  }
 
-    return dbResult as WorkoutSheetResponse[];
+  async findOne(id: number) {
+    return await db.workoutSheet.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
   async findLastPosition() {
@@ -41,44 +43,20 @@ export class WorkoutSheetService {
     return dbResult.length ? dbResult[0].position : 0;
   }
 
-  async update(id: number, workoutSheet: EditWorkoutSheetDto) {
-    const dbResult = await db.workoutSheet.update({
+  async update(id: number, workoutSheet: EditWorkoutSheetDto | ReorderWorkoutSheetDto) {
+    return await db.workoutSheet.update({
       where: {
         id,
       },
       data: workoutSheet,
-      select: {
-        id: true,
-        name: true,
-        trainings: {
-          orderBy: {
-            position: 'asc',
-          },
-          select: selectTrainingResponse,
-        },
-      },
     });
-
-    return dbResult as WorkoutSheetResponse;
   }
 
   async delete(id: number) {
-    const dbResult = await db.workoutSheet.delete({
+    await db.workoutSheet.delete({
       where: {
         id: id,
       },
-      select: {
-        id: true,
-        name: true,
-        trainings: {
-          orderBy: {
-            position: 'asc',
-          },
-          select: selectTrainingResponse,
-        },
-      },
     });
-
-    return dbResult as WorkoutSheetResponse;
   }
 }
