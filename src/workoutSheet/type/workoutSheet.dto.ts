@@ -1,14 +1,22 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber, Min } from 'class-validator';
 
 export class CreateWorkoutSheetDto {
   @IsNotEmpty()
   @Transform(({ value }) => String(value))
-  name: string;
-
-  constructor() {
-    this.name = '';
-  }
+  name!: string;
 }
 
 export class EditWorkoutSheetDto extends CreateWorkoutSheetDto {}
+
+export class ReorderWorkoutSheetDto {
+  @IsNumber()
+  @Min(1)
+  @Transform(({ value }) => Number(value))
+  id!: number;
+
+  @IsNumber()
+  @Min(1)
+  @Transform(({ value }) => Number(value))
+  position!: number;
+}
