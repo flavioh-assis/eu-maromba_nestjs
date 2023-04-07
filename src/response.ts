@@ -2,7 +2,6 @@ import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import { TrainingResponse } from './training/type/training.response';
 import { RequestResponse } from './type';
 import { HttpStatus } from '@nestjs/common/enums';
-import { ExerciseResponse } from './exercise/type/exercise.response';
 
 enum Text {
   BAD_REQUEST = 'Bad request.',
@@ -70,7 +69,7 @@ export function errorOnValidate(error: string) {
   } as RequestResponse;
 }
 
-export function successOnCreate(data: ExerciseResponse | TrainingResponse) {
+export function successOnCreate(data: TrainingResponse) {
   return {
     success: true,
     statusCode: HttpStatus.CREATED,
@@ -79,7 +78,7 @@ export function successOnCreate(data: ExerciseResponse | TrainingResponse) {
   } as RequestResponse;
 }
 
-export function successOnDelete(data: ExerciseResponse | TrainingResponse) {
+export function successOnDelete(data: TrainingResponse) {
   return {
     success: true,
     statusCode: HttpStatus.NO_CONTENT,
@@ -88,7 +87,7 @@ export function successOnDelete(data: ExerciseResponse | TrainingResponse) {
   } as RequestResponse;
 }
 
-export function successOnFindOne(data: ExerciseResponse | TrainingResponse | null) {
+export function successOnFindOne(data: TrainingResponse | null) {
   return {
     success: true,
     statusCode: data ? HttpStatus.OK : HttpStatus.NO_CONTENT,
@@ -97,7 +96,7 @@ export function successOnFindOne(data: ExerciseResponse | TrainingResponse | nul
   } as RequestResponse;
 }
 
-export function successOnFindMany(data: ExerciseResponse[] | TrainingResponse[]) {
+export function successOnFindMany(data: TrainingResponse[]) {
   return {
     success: true,
     statusCode: data.length ? HttpStatus.OK : HttpStatus.NO_CONTENT,
@@ -106,9 +105,7 @@ export function successOnFindMany(data: ExerciseResponse[] | TrainingResponse[])
   } as RequestResponse;
 }
 
-export function successOnUpdate(
-  data: ExerciseResponse | TrainingResponse | TrainingResponse[]
-) {
+export function successOnUpdate(data: TrainingResponse | TrainingResponse[]) {
   return {
     success: true,
     statusCode: HttpStatus.NO_CONTENT,
