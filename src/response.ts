@@ -1,5 +1,4 @@
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
-import { MuscleGroupResponse } from './muscle-group/type/muscle-group.response';
 import { TrainingResponse } from './training/type/training.response';
 import { RequestResponse } from './type';
 import { HttpStatus } from '@nestjs/common/enums';
@@ -89,9 +88,7 @@ export function successOnDelete(data: ExerciseResponse | TrainingResponse) {
   } as RequestResponse;
 }
 
-export function successOnFindOne(
-  data: ExerciseResponse | MuscleGroupResponse | TrainingResponse | null
-) {
+export function successOnFindOne(data: ExerciseResponse | TrainingResponse | null) {
   return {
     success: true,
     statusCode: data ? HttpStatus.OK : HttpStatus.NO_CONTENT,
@@ -100,9 +97,7 @@ export function successOnFindOne(
   } as RequestResponse;
 }
 
-export function successOnFindMany(
-  data: ExerciseResponse[] | MuscleGroupResponse[] | TrainingResponse[]
-) {
+export function successOnFindMany(data: ExerciseResponse[] | TrainingResponse[]) {
   return {
     success: true,
     statusCode: data.length ? HttpStatus.OK : HttpStatus.NO_CONTENT,
