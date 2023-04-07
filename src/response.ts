@@ -2,7 +2,6 @@ import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import { MuscleGroupResponse } from './muscleGroup/type/muscleGroup.response';
 import { TrainingResponse } from './training/type/training.response';
 import { RequestResponse } from './type';
-import { WorkoutSheetResponse } from './workoutSheet/type/workoutSheet.response';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ExerciseResponse } from './exercise/type/exercise.response';
 
@@ -72,9 +71,7 @@ export function errorOnValidate(error: string) {
   } as RequestResponse;
 }
 
-export function successOnCreate(
-  data: ExerciseResponse | TrainingResponse | WorkoutSheetResponse
-) {
+export function successOnCreate(data: ExerciseResponse | TrainingResponse) {
   return {
     success: true,
     statusCode: HttpStatus.CREATED,
@@ -83,9 +80,7 @@ export function successOnCreate(
   } as RequestResponse;
 }
 
-export function successOnDelete(
-  data: ExerciseResponse | TrainingResponse | WorkoutSheetResponse
-) {
+export function successOnDelete(data: ExerciseResponse | TrainingResponse) {
   return {
     success: true,
     statusCode: HttpStatus.NO_CONTENT,
@@ -95,12 +90,7 @@ export function successOnDelete(
 }
 
 export function successOnFindOne(
-  data:
-    | ExerciseResponse
-    | MuscleGroupResponse
-    | TrainingResponse
-    | WorkoutSheetResponse
-    | null
+  data: ExerciseResponse | MuscleGroupResponse | TrainingResponse | null
 ) {
   return {
     success: true,
@@ -111,11 +101,7 @@ export function successOnFindOne(
 }
 
 export function successOnFindMany(
-  data:
-    | ExerciseResponse[]
-    | MuscleGroupResponse[]
-    | TrainingResponse[]
-    | WorkoutSheetResponse[]
+  data: ExerciseResponse[] | MuscleGroupResponse[] | TrainingResponse[]
 ) {
   return {
     success: true,
@@ -126,7 +112,7 @@ export function successOnFindMany(
 }
 
 export function successOnUpdate(
-  data: ExerciseResponse | TrainingResponse | TrainingResponse[] | WorkoutSheetResponse
+  data: ExerciseResponse | TrainingResponse | TrainingResponse[]
 ) {
   return {
     success: true,
