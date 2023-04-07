@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'src/db.connection';
-import { EditWorkoutSheetDto, ReorderWorkoutSheetDto } from './type/workoutSheet.dto';
+import { EditWorkoutSheetDto, ReorderWorkoutSheetDto } from './type/workout-sheet.dto';
 import { WorkoutSheet } from '@prisma/client';
 
 @Injectable()

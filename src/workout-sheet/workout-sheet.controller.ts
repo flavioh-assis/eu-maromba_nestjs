@@ -14,9 +14,9 @@ import {
   CreateWorkoutSheetDto,
   EditWorkoutSheetDto,
   ReorderWorkoutSheetDto,
-} from './type/workoutSheet.dto';
-import { WorkoutSheetService } from './workoutSheet.service';
-import { WorkoutSheetBuilder } from './workoutSheet.builder';
+} from './type/workout-sheet.dto';
+import { WorkoutSheetService } from './workout-sheet.service';
+import { WorkoutSheetBuilder } from './workout-sheet.builder';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Workout Sheet')

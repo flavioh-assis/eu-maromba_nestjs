@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { WorkoutSheetController } from './workoutSheet.controller';
-import { WorkoutSheetService } from './workoutSheet.service';
+import { WorkoutSheetController } from './workout-sheet.controller';
+import { WorkoutSheetService } from './workout-sheet.service';
 
 @Module({
   controllers: [WorkoutSheetController],

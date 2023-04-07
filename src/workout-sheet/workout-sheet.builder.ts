@@ -1,4 +1,4 @@
-import { WorkoutSheet } from './type/workoutSheet.model';
+import { WorkoutSheet } from './type/workout-sheet.model';
 
 export class WorkoutSheetBuilder {
   private name!: string;
