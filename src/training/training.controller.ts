@@ -6,8 +6,10 @@ import {
   errorOnFind,
   errorOnUpdate,
   errorOnValidate,
+  successOnCreate,
   successOnDelete,
   successOnFindMany,
+  successOnFindOne,
   successOnUpdate,
 } from 'src/response';
 import { validateId } from 'src/validator';
@@ -37,7 +39,9 @@ export class TrainingController {
         lastPosition + 1
       );
 
-      return await this.service.create(mappedTraining);
+      const dbResult = await this.service.create(mappedTraining);
+
+      return successOnCreate(dbResult);
     } catch (error) {
       console.error(error);
 
@@ -51,6 +55,23 @@ export class TrainingController {
       const dbResult = await this.service.findAll(Number(workoutSheetId));
 
       return successOnFindMany(dbResult);
+    } catch (error) {
+      console.error(error);
+
+      return errorOnFind(error as PrismaClientUnknownRequestError);
+    }
+  }
+
+  @Get('trainings/:id')
+  async findOne(@Param('id') id: string) {
+    if (!validateId(id)) {
+      return errorOnValidate(`Id {${id}} is not valid.`);
+    }
+
+    try {
+      const dbResult = await this.service.findOne(Number(id));
+
+      return successOnFindOne(dbResult);
     } catch (error) {
       console.error(error);
 
