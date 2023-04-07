@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MuscleGroupController } from './muscleGroup.controller';
-import { MuscleGroupService } from './muscleGroup.service';
+import { MuscleGroupController } from './muscle-group.controller';
+import { MuscleGroupService } from './muscle-group.service';
 
 @Module({
   controllers: [MuscleGroupController],

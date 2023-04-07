@@ -1,5 +1,5 @@
 import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
-import { MuscleGroupResponse } from './muscleGroup/type/muscleGroup.response';
+import { MuscleGroupResponse } from './muscle-group/type/muscle-group.response';
 import { TrainingResponse } from './training/type/training.response';
 import { RequestResponse } from './type';
 import { HttpStatus } from '@nestjs/common/enums';

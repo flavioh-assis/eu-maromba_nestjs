@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { successOnFindMany, errorOnFind } from 'src/response';
-import { MuscleGroupService } from './muscleGroup.service';
+import { MuscleGroupService } from './muscle-group.service';
 
 @Controller('muscle-groups')
 export class MuscleGroupController {
