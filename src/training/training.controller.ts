@@ -1,150 +1,111 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
-import { PrismaClientUnknownRequestError } from '@prisma/client/runtime';
 import {
-  errorOnCreate,
-  errorOnDelete,
-  errorOnFind,
-  errorOnUpdate,
-  errorOnValidate,
-  successOnCreate,
-  successOnDelete,
-  successOnFindMany,
-  successOnFindOne,
-  successOnUpdate,
-} from 'src/response';
-import { validateId } from 'src/validator';
-import { mapTrainingEdit, mapTrainingCreate } from './training.mapper';
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
+import { mapTrainingUpdate, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
 import {
   CreateTrainingRequest,
-  EditTrainingRequest,
-  ReorderTrainingRequest,
+  ReorderTrainingDto,
+  UpdateTrainingDto,
 } from './type/training.request';
+import { ApiTags } from '@nestjs/swagger';
+import { ExerciseService } from 'src/exercise/exercise.service';
+import { WorkoutSheetService } from 'src/workout-sheet/workout-sheet.service';
 
-@Controller()
+@ApiTags('Training')
+@Controller('workout-sheets/:workoutSheetId/trainings')
 export class TrainingController {
-  constructor(private readonly service: TrainingService) {}
+  constructor(
+    private readonly trainingService: TrainingService,
+    private readonly exerciseService: ExerciseService,
+    private readonly workoutSheetService: WorkoutSheetService
+  ) {}
 
-  @Post('workout-sheets/:id/trainings')
+  @Post()
   async create(
-    @Param('id') workoutSheetId: string,
+    @Param('workoutSheetId') workoutSheetId: number,
     @Body() training: CreateTrainingRequest
   ) {
-    try {
-      const lastPosition = await this.service.findLastPosition(Number(workoutSheetId));
+    const lastPosition = await this.trainingService.findLastPosition(workoutSheetId);
 
-      const mappedTraining = mapTrainingCreate(
-        training,
-        Number(workoutSheetId),
-        lastPosition + 1
+    const mappedTraining = mapTrainingCreate(
+      training,
+      Number(workoutSheetId),
+      lastPosition + 1
+    );
+
+    return await this.trainingService.create(mappedTraining);
+  }
+
+  @Get()
+  async findAll(@Param('workoutSheetId') workoutSheetId: number) {
+    return await this.trainingService.findAll(workoutSheetId);
+  }
+
+  @Patch()
+  async reorder(@Body() request: ReorderTrainingDto[]) {
+    const dbResult = await Promise.all(
+      request.map(async training => {
+        return await this.trainingService.update(training.id, training);
+      })
+    );
+
+    const trainingsOrderedByPosition = dbResult.sort((a, b) => a.position - b.position);
+
+    return trainingsOrderedByPosition;
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: number, @Body() training: UpdateTrainingDto) {
+    const trainingInDB = await this.trainingService.findOne(id);
+
+    if (!trainingInDB) {
+      return new BadRequestException("Training doesn't exist.");
+    }
+
+    if (training?.exercise) {
+      const exerciseInDB = await this.exerciseService.findOne(training.exercise.id);
+
+      if (!exerciseInDB) {
+        return new BadRequestException("Exercise doesn't exist.");
+      }
+    }
+
+    if (training?.workoutSheet) {
+      const workoutSheetInDB = await this.workoutSheetService.findOne(
+        training.workoutSheet.id
       );
 
-      const dbResult = await this.service.create(mappedTraining);
-
-      return successOnCreate(dbResult);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnCreate(error as PrismaClientUnknownRequestError);
-    }
-  }
-
-  @Get('workout-sheets/:id/trainings')
-  async findAll(@Param('id') workoutSheetId: string) {
-    try {
-      const dbResult = await this.service.findAll(Number(workoutSheetId));
-
-      return successOnFindMany(dbResult);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnFind(error as PrismaClientUnknownRequestError);
-    }
-  }
-
-  @Get('trainings/:id')
-  async findOne(@Param('id') id: string) {
-    if (!validateId(id)) {
-      return errorOnValidate(`Id {${id}} is not valid.`);
-    }
-
-    try {
-      const dbResult = await this.service.findOne(Number(id));
-
-      return successOnFindOne(dbResult);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnFind(error as PrismaClientUnknownRequestError);
-    }
-  }
-
-  @Patch('trainings/:id')
-  async update(@Param('id') id: string, @Body() training: EditTrainingRequest) {
-    if (!validateId(id)) {
-      return errorOnValidate(`Id {${id}} is not valid.`);
-    }
-
-    try {
-      const trainingInDB = await this.service.findOne(Number(id));
-
-      if (!trainingInDB) {
-        return errorOnUpdate({ message: 'Id not found.' });
+      if (!workoutSheetInDB) {
+        return new BadRequestException("WorkoutSheet doesn't exist.");
       }
-
-      const mappedTraining = mapTrainingEdit(training);
-
-      if (trainingInDB.workoutSheet.id !== mappedTraining.workoutSheetId) {
-        const lastPositionInWorkoutSheet = await this.service.findLastPosition(
-          Number(training.workoutSheet.id)
-        );
-
-        mappedTraining.position = lastPositionInWorkoutSheet + 1;
-      }
-
-      const dbResult = await this.service.update(Number(id), mappedTraining);
-
-      return successOnUpdate(dbResult);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnUpdate(error as PrismaClientUnknownRequestError);
     }
-  }
 
-  @Patch('trainings')
-  async reorder(@Body() request: ReorderTrainingRequest[]) {
-    try {
-      const dbResult = await Promise.all(
-        request.map(async training => {
-          return await this.service.update(training.id, training);
-        })
+    const mappedTraining = mapTrainingUpdate(training);
+
+    if (
+      training?.workoutSheet?.id &&
+      trainingInDB.workoutSheet.id !== mappedTraining.workoutSheetId
+    ) {
+      const lastPositionInWorkoutSheet = await this.trainingService.findLastPosition(
+        Number(mappedTraining.workoutSheetId)
       );
 
-      const trainingsOrderedByPosition = dbResult.sort((a, b) => a.position - b.position);
-
-      return successOnUpdate(trainingsOrderedByPosition);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnUpdate(error as PrismaClientUnknownRequestError);
+      mappedTraining.position = lastPositionInWorkoutSheet + 1;
     }
+
+    return await this.trainingService.update(Number(id), mappedTraining);
   }
 
-  @Delete('trainings/:id')
-  async delete(@Param('id') id: string) {
-    if (!validateId(id)) {
-      return errorOnValidate(`Id {${id}} is not valid.`);
-    }
-
-    try {
-      const dbResult = await this.service.delete(Number(id));
-
-      return successOnDelete(dbResult);
-    } catch (error) {
-      console.error(error);
-
-      return errorOnDelete(error as PrismaClientUnknownRequestError);
-    }
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return await this.trainingService.delete(id);
   }
 }

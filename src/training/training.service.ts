@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Training } from '@prisma/client';
 import { db } from 'src/db.connection';
 import { selectTrainingResponse } from './training.constant';
-import { ReorderTrainingRequest } from './type/training.request';
 import { TrainingResponse } from './type/training.response';
+import { ReorderTrainingDto } from './type/training.request';
 
 @Injectable()
 export class TrainingService {
@@ -62,7 +62,7 @@ export class TrainingService {
     return dbResult.length ? dbResult[0].position : 0;
   }
 
-  async update(id: number, training: Training | ReorderTrainingRequest) {
+  async update(id: number, training: Training | ReorderTrainingDto) {
     const dbResult = await db.training.update({
       where: {
         id,
