@@ -84,7 +84,7 @@ export class TrainingController {
       );
 
       if (!workoutSheetInDB) {
-        return new BadRequestException("WorkoutSheet doesn't exist.");
+        return new BadRequestException("Workout sheet doesn't exist.");
       }
     }
 
