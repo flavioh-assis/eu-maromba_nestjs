@@ -1,14 +1,14 @@
 import { Training } from '@prisma/client';
-import { CreateTrainingRequest, UpdateTrainingDto } from './type/training.request';
+import { CreateTrainingDto, UpdateTrainingDto } from './type/training.request';
 
 export function mapTrainingUpdate(dto: UpdateTrainingDto) {
   const training = {
-    sets: dto?.sets,
-    reps: dto?.reps,
-    restTime: dto?.restTime,
-    obs: dto?.obs,
-    workoutSheetId: dto?.workoutSheet?.id,
-    exerciseId: dto?.exercise?.id,
+    sets: dto.sets,
+    reps: dto.reps,
+    restTime: dto.restTime,
+    obs: dto.obs,
+    workoutSheetId: dto.workoutSheet?.id,
+    exerciseId: dto.exercise?.id,
   } as Training;
 
   (Object.keys(training) as (keyof Training)[]).forEach(key => {
@@ -21,16 +21,16 @@ export function mapTrainingUpdate(dto: UpdateTrainingDto) {
 }
 
 export function mapTrainingCreate(
-  request: CreateTrainingRequest,
+  dto: CreateTrainingDto,
   workoutSheetId: number,
   position: number
 ) {
   return {
-    exerciseId: request.exercise.id,
-    sets: request.sets,
-    reps: request.reps,
-    restTime: request.restTime,
-    obs: request.obs,
+    exerciseId: dto.exercise.id,
+    sets: dto.sets,
+    reps: dto.reps,
+    restTime: dto.restTime,
+    obs: dto.obs,
     workoutSheetId,
     position,
   } as Training;
