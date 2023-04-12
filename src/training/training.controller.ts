@@ -31,27 +31,27 @@ export class TrainingController {
   @Post()
   async create(
     @Param('workoutSheetId') workoutSheetId: number,
-    @Body() training: CreateTrainingDto
+    @Body() dto: CreateTrainingDto
   ) {
     const workoutSheetInDB = await this.workoutSheetService.findOne(workoutSheetId);
     if (!workoutSheetInDB) {
       return new BadRequestException('Workout sheet does not exist.');
     }
 
-    const exerciseInDB = await this.exerciseService.findOne(training.exercise.id);
+    const exerciseInDB = await this.exerciseService.findOne(dto.exercise.id);
     if (!exerciseInDB) {
       return new BadRequestException('Exercise does not exist.');
     }
 
     const lastPosition = await this.trainingService.findLastPosition(workoutSheetId);
-    const mappedTraining = mapTrainingCreate(training, workoutSheetId, lastPosition + 1);
+    const mappedTraining = mapTrainingCreate(dto, workoutSheetId, lastPosition + 1);
 
     return await this.trainingService.create(mappedTraining);
   }
 
   @Get()
-  async findAll(@Param('workoutSheetId') workoutSheetId: number) {
-    return await this.trainingService.findAll(workoutSheetId);
+  async findAllInWorkoutSheet(@Param('workoutSheetId') workoutSheetId: number) {
+    return await this.trainingService.findAllByWorkoutSheetId(workoutSheetId);
   }
 
   @Patch()
@@ -103,7 +103,7 @@ export class TrainingController {
 
     if (!trainingInDB) return new BadRequestException('Training does not exist.');
 
-    if (dto?.exercise) {
+    if (dto.exercise) {
       const exerciseInDB = await this.exerciseService.findOne(dto.exercise.id);
 
       if (!exerciseInDB) {
@@ -111,7 +111,7 @@ export class TrainingController {
       }
     }
 
-    if (dto?.workoutSheet) {
+    if (dto.workoutSheet) {
       const workoutSheetInDB = await this.workoutSheetService.findOne(
         dto.workoutSheet.id
       );
@@ -124,7 +124,7 @@ export class TrainingController {
     const mappedTraining = mapTrainingUpdate(dto);
 
     if (
-      dto?.workoutSheet?.id &&
+      dto.workoutSheet?.id &&
       trainingInDB.workoutSheet.id !== mappedTraining.workoutSheetId
     ) {
       const lastPositionInWorkoutSheet = await this.trainingService.findLastPosition(
@@ -134,7 +134,7 @@ export class TrainingController {
       mappedTraining.position = lastPositionInWorkoutSheet + 1;
     }
 
-    return await this.trainingService.update(Number(id), mappedTraining);
+    return await this.trainingService.update(id, mappedTraining);
   }
 
   @Delete(':id')
