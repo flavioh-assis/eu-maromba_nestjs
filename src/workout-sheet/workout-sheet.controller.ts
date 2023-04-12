@@ -20,7 +20,7 @@ import { WorkoutSheetBuilder } from './workout-sheet.builder';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Workout Sheet')
-@Controller('workout-sheets')
+@Controller()
 export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 

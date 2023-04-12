@@ -22,7 +22,7 @@ import { ExerciseService } from 'src/exercise/exercise.service';
 import { WorkoutSheetService } from 'src/workout-sheet/workout-sheet.service';
 
 @ApiTags('Training')
-@Controller('workout-sheets/:workoutSheetId/trainings')
+@Controller()
 export class TrainingController {
   constructor(
     private readonly trainingService: TrainingService,

@@ -3,7 +3,7 @@ import { MuscleGroupService } from './muscle-group.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Muscle Group')
-@Controller('muscle-groups')
+@Controller()
 export class MuscleGroupController {
   constructor(private readonly service: MuscleGroupService) {}
 

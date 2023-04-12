@@ -7,8 +7,8 @@ import { ApiTags } from '@nestjs/swagger';
 export class ExerciseController {
   constructor(private readonly service: ExerciseService) {}
 
-  @Get('muscle-groups/:id/exercises')
-  async findAllForMuscleGroup(@Param('id') muscleGroupId: number) {
+  @Get()
+  async findAllForMuscleGroup(@Param('muscleGroupId') muscleGroupId: number) {
     return await this.service.findAllForMuscleGroup(muscleGroupId);
   }
 }
