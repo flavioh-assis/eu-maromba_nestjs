@@ -12,7 +12,7 @@ import {
 import { mapTrainingUpdate, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
 import {
-  CreateTrainingRequest,
+  CreateTrainingDto,
   ReorderTrainingDto,
   UpdateTrainingDto,
 } from './type/training.request';
@@ -32,15 +32,20 @@ export class TrainingController {
   @Post()
   async create(
     @Param('workoutSheetId') workoutSheetId: number,
-    @Body() training: CreateTrainingRequest
+    @Body() training: CreateTrainingDto
   ) {
-    const lastPosition = await this.trainingService.findLastPosition(workoutSheetId);
+    const workoutSheetInDB = await this.workoutSheetService.findOne(workoutSheetId);
+    if (!workoutSheetInDB) {
+      return new BadRequestException('Workout sheet does not exist.');
+    }
 
-    const mappedTraining = mapTrainingCreate(
-      training,
-      Number(workoutSheetId),
-      lastPosition + 1
-    );
+    const exerciseInDB = await this.exerciseService.findOne(training.exercise.id);
+    if (!exerciseInDB) {
+      return new BadRequestException('Exercise does not exist.');
+    }
+
+    const lastPosition = await this.trainingService.findLastPosition(workoutSheetId);
+    const mappedTraining = mapTrainingCreate(training, workoutSheetId, lastPosition + 1);
 
     return await this.trainingService.create(mappedTraining);
   }
@@ -82,24 +87,22 @@ export class TrainingController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() training: UpdateTrainingDto) {
+  async update(@Param('id') id: number, @Body() dto: UpdateTrainingDto) {
     const trainingInDB = await this.trainingService.findOne(id);
 
-    if (!trainingInDB) {
-      return new BadRequestException('Training does not exist.');
-    }
+    if (!trainingInDB) return new BadRequestException('Training does not exist.');
 
-    if (training?.exercise) {
-      const exerciseInDB = await this.exerciseService.findOne(training.exercise.id);
+    if (dto?.exercise) {
+      const exerciseInDB = await this.exerciseService.findOne(dto.exercise.id);
 
       if (!exerciseInDB) {
         return new BadRequestException('Exercise does not exist.');
       }
     }
 
-    if (training?.workoutSheet) {
+    if (dto?.workoutSheet) {
       const workoutSheetInDB = await this.workoutSheetService.findOne(
-        training.workoutSheet.id
+        dto.workoutSheet.id
       );
 
       if (!workoutSheetInDB) {
@@ -107,10 +110,10 @@ export class TrainingController {
       }
     }
 
-    const mappedTraining = mapTrainingUpdate(training);
+    const mappedTraining = mapTrainingUpdate(dto);
 
     if (
-      training?.workoutSheet?.id &&
+      dto?.workoutSheet?.id &&
       trainingInDB.workoutSheet.id !== mappedTraining.workoutSheetId
     ) {
       const lastPositionInWorkoutSheet = await this.trainingService.findLastPosition(
