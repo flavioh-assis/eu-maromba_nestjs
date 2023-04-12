@@ -15,7 +15,7 @@ import { WorkoutSheetBuilder } from './workout-sheet.builder';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateWorkoutSheetDto } from './dto/create-workout-sheet.dto';
 import { ReorderWorkoutSheetDto } from './dto/reorder-workout-sheet.dto';
-import { UpdateWorkoutSheetDto } from './dto/update-workout-sheet-dto';
+import { UpdateWorkoutSheetDto } from './dto/update-workout-sheet.dto';
 
 @ApiTags('Workout Sheet')
 @Controller()
