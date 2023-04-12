@@ -17,7 +17,7 @@ import {
   ReorderTrainingDto,
   UpdateTrainingDto,
 } from './type/training.request';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ExerciseService } from 'src/exercise/exercise.service';
 import { WorkoutSheetService } from 'src/workout-sheet/workout-sheet.service';
 
@@ -57,6 +57,18 @@ export class TrainingController {
   }
 
   @Patch()
+  @ApiBody({
+    type: ReorderTrainingDto,
+    isArray: true,
+    examples: {
+      multiple: {
+        value: [
+          { id: 1, position: 2 },
+          { id: 2, position: 1 },
+        ],
+      },
+    },
+  })
   async reorder(
     @Body(
       new ParseArrayPipe({

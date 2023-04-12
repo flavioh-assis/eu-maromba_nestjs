@@ -1,10 +1,12 @@
-import { PickType } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
 
 export class CreateWorkoutSheetDto {
   @IsNotEmpty()
-  @Transform(({ value }) => String(value))
+  @IsString()
+  @ApiProperty({
+    example: 'A',
+  })
   name!: string;
 }
 
@@ -13,10 +15,16 @@ export class UpdateWorkoutSheetDto extends CreateWorkoutSheetDto {}
 export class ReorderWorkoutSheetDto {
   @IsNumber()
   @Min(1)
+  @ApiProperty({
+    example: 1,
+  })
   id!: number;
 
   @IsNumber()
   @Min(1)
+  @ApiProperty({
+    example: 2,
+  })
   position!: number;
 }
 

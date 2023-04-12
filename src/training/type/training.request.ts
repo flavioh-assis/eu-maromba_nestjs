@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDefined,
@@ -44,10 +45,16 @@ export class UpdateTrainingDto {
 export class ReorderTrainingDto {
   @IsNumber()
   @Min(1)
+  @ApiProperty({
+    example: 1,
+  })
   id!: number;
 
   @IsNumber()
   @Min(1)
+  @ApiProperty({
+    example: 2,
+  })
   position!: number;
 }
 

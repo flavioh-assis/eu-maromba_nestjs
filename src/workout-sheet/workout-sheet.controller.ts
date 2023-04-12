@@ -17,7 +17,7 @@ import {
 } from './type/workout-sheet.dto';
 import { WorkoutSheetService } from './workout-sheet.service';
 import { WorkoutSheetBuilder } from './workout-sheet.builder';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Workout Sheet')
 @Controller()
@@ -42,6 +42,18 @@ export class WorkoutSheetController {
   }
 
   @Patch()
+  @ApiBody({
+    type: ReorderWorkoutSheetDto,
+    isArray: true,
+    examples: {
+      multiple: {
+        value: [
+          { id: 1, position: 2 },
+          { id: 2, position: 1 },
+        ],
+      },
+    },
+  })
   async reorder(
     @Body(
       new ParseArrayPipe({
