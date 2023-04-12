@@ -9,7 +9,6 @@ export const selectTrainingResponse = {
   workoutSheet: {
     select: {
       id: true,
-      name: true,
     },
   },
   sets: true,

@@ -8,12 +8,12 @@ import { ReorderTrainingDto } from './dto/reorder-training.dto';
 @Injectable()
 export class TrainingService {
   async create(training: Training) {
-    const dbResult = await db.training.create({
+    const createdTraining = await db.training.create({
       data: training,
       select: selectTrainingResponse,
     });
 
-    return dbResult as TrainingResponse;
+    return createdTraining as TrainingResponse;
   }
 
   async findAll(workoutSheetId: number) {
