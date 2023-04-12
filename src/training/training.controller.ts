@@ -8,6 +8,7 @@ import {
   Delete,
   BadRequestException,
   ParseArrayPipe,
+  HttpCode,
 } from '@nestjs/common';
 import { mapTrainingUpdate, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
@@ -72,7 +73,7 @@ export class TrainingController {
     );
 
     if (validTrainings.some(t => t == null)) {
-      return new BadRequestException('One or more training does not exist.');
+      return new BadRequestException('One or more trainings do not exist.');
     }
 
     const dbResult = await Promise.all(
@@ -127,6 +128,7 @@ export class TrainingController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async delete(@Param('id') id: number) {
     const exerciseInDB = await this.exerciseService.findOne(id);
 
@@ -134,6 +136,6 @@ export class TrainingController {
       return new BadRequestException('Exercise does not exist.');
     }
 
-    return await this.trainingService.delete(id);
+    await this.trainingService.delete(id);
   }
 }
