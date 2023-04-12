@@ -142,10 +142,10 @@ export class TrainingController {
   @Delete(':id')
   @HttpCode(204)
   async delete(@Param('id') id: number) {
-    const exerciseInDB = await this.exerciseService.findOne(id);
+    const trainingInDB = await this.trainingService.findOne(id);
 
-    if (!exerciseInDB) {
-      return new BadRequestException('Exercise does not exist.');
+    if (!trainingInDB) {
+      return new BadRequestException('Training does not exist.');
     }
 
     await this.trainingService.delete(id);
