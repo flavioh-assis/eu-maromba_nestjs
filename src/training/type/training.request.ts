@@ -1,5 +1,12 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import {
+  IsDefined,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { ExerciseDto } from 'src/exercise/type/exercise.dto';
 import { WorkoutSheetDto } from 'src/workout-sheet/type/workout-sheet.dto';
 
@@ -45,18 +52,17 @@ export class ReorderTrainingDto {
 }
 
 export class CreateTrainingDto {
-  @ValidateNested({ each: true })
-  @Type(() => ExerciseDto)
-  exercise!: ExerciseDto;
-
+  @IsDefined()
   @IsNumber()
   @Min(1)
   sets!: number;
 
+  @IsDefined()
   @IsNumber()
   @Min(1)
   reps!: number;
 
+  @IsDefined()
   @IsNumber()
   @Min(1)
   restTime!: number;
@@ -64,6 +70,11 @@ export class CreateTrainingDto {
   @IsOptional()
   @IsString()
   obs?: string;
+
+  @IsDefined()
+  @ValidateNested({ each: true })
+  @Type(() => ExerciseDto)
+  exercise!: ExerciseDto;
 
   constructor() {
     this.obs = '';
