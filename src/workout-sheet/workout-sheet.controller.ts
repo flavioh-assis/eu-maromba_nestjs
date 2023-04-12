@@ -11,7 +11,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { WorkoutSheetService } from './workout-sheet.service';
-import { WorkoutSheetBuilder } from './workout-sheet.builder';
+import { WorkoutSheetBuilder } from './builder/workout-sheet.builder';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateWorkoutSheetDto } from './dto/create-workout-sheet.dto';
 import { ReorderWorkoutSheetDto } from './dto/reorder-workout-sheet.dto';
