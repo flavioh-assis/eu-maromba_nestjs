@@ -33,14 +33,12 @@ export class TrainingService {
   }
 
   async findOne(id: number) {
-    const dbResult = await db.training.findUnique({
+    return await db.training.findFirst({
       where: {
         id,
       },
       select: selectTrainingResponse,
     });
-
-    return dbResult as TrainingResponse;
   }
 
   async findLastPosition(workoutSheetId: number) {
