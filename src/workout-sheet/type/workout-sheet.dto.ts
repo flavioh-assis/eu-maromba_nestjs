@@ -8,7 +8,7 @@ export class CreateWorkoutSheetDto {
   name!: string;
 }
 
-export class EditWorkoutSheetDto extends CreateWorkoutSheetDto {}
+export class UpdateWorkoutSheetDto extends CreateWorkoutSheetDto {}
 
 export class ReorderWorkoutSheetDto {
   @IsNumber()

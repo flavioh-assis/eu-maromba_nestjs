@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'src/db.connection';
-import { EditWorkoutSheetDto, ReorderWorkoutSheetDto } from './type/workout-sheet.dto';
+import { UpdateWorkoutSheetDto, ReorderWorkoutSheetDto } from './type/workout-sheet.dto';
 import { WorkoutSheet } from '@prisma/client';
 
 @Injectable()
@@ -43,7 +43,7 @@ export class WorkoutSheetService {
     return dbResult.length ? dbResult[0].position : 0;
   }
 
-  async update(id: number, workoutSheet: EditWorkoutSheetDto | ReorderWorkoutSheetDto) {
+  async update(id: number, workoutSheet: UpdateWorkoutSheetDto | ReorderWorkoutSheetDto) {
     return await db.workoutSheet.update({
       where: {
         id,

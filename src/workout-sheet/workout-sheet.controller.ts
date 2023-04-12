@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import {
   CreateWorkoutSheetDto,
-  EditWorkoutSheetDto,
+  UpdateWorkoutSheetDto,
   ReorderWorkoutSheetDto,
 } from './type/workout-sheet.dto';
 import { WorkoutSheetService } from './workout-sheet.service';
@@ -75,7 +75,7 @@ export class WorkoutSheetController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() dto: EditWorkoutSheetDto) {
+  async update(@Param('id') id: number, @Body() dto: UpdateWorkoutSheetDto) {
     return await this.service.update(id, dto);
   }
 
