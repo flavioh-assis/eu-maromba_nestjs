@@ -10,8 +10,6 @@ export class CreateWorkoutSheetDto {
   name!: string;
 }
 
-export class UpdateWorkoutSheetDto extends CreateWorkoutSheetDto {}
-
 export class ReorderWorkoutSheetDto {
   @IsNumber()
   @Min(1)
@@ -27,5 +25,7 @@ export class ReorderWorkoutSheetDto {
   })
   position!: number;
 }
+
+export class UpdateWorkoutSheetDto extends CreateWorkoutSheetDto {}
 
 export class WorkoutSheetDto extends PickType(ReorderWorkoutSheetDto, ['id'] as const) {}
