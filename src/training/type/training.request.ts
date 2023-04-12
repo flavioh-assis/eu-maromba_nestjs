@@ -44,12 +44,28 @@ export class ReorderTrainingDto {
   position!: number;
 }
 
-export type CreateTrainingRequest = {
-  exercise: {
-    id: number;
-  };
-  sets: number;
-  reps: number;
-  restTime: number;
-  obs: string;
-};
+export class CreateTrainingDto {
+  @ValidateNested({ each: true })
+  @Type(() => ExerciseDto)
+  exercise!: ExerciseDto;
+
+  @IsNumber()
+  @Min(1)
+  sets!: number;
+
+  @IsNumber()
+  @Min(1)
+  reps!: number;
+
+  @IsNumber()
+  @Min(1)
+  restTime!: number;
+
+  @IsOptional()
+  @IsString()
+  obs?: string;
+
+  constructor() {
+    this.obs = '';
+  }
+}
