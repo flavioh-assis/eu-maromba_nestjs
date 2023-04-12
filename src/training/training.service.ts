@@ -73,13 +73,11 @@ export class TrainingService {
   }
 
   async delete(id: number) {
-    const dbResult = await db.training.delete({
+    await db.training.delete({
       where: {
         id,
       },
       select: selectTrainingResponse,
     });
-
-    return dbResult as TrainingResponse;
   }
 }
