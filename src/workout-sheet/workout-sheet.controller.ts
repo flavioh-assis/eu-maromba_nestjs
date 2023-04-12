@@ -25,7 +25,6 @@ export class WorkoutSheetController {
   constructor(private readonly service: WorkoutSheetService) {}
 
   @Post()
-  @HttpCode(201)
   async create(@Body() dto: CreateWorkoutSheetDto) {
     const lastPosition = await this.service.findLastPosition();
 
@@ -38,19 +37,11 @@ export class WorkoutSheetController {
   }
 
   @Get()
-  @HttpCode(200)
   async findAll() {
     return await this.service.findAll();
   }
 
-  @Patch(':id')
-  @HttpCode(200)
-  async update(@Param('id') id: number, @Body() dto: EditWorkoutSheetDto) {
-    return await this.service.update(id, dto);
-  }
-
   @Patch()
-  @HttpCode(200)
   async reorder(
     @Body(
       new ParseArrayPipe({
@@ -60,6 +51,16 @@ export class WorkoutSheetController {
     )
     dto: ReorderWorkoutSheetDto[]
   ) {
+    const validWorkoutSheets = await Promise.all(
+      dto.map(async training => {
+        return await this.service.findOne(training.id);
+      })
+    );
+
+    if (validWorkoutSheets.some(t => t == null)) {
+      return new BadRequestException('One or more workout sheets do not exist.');
+    }
+
     const dbResult = await Promise.all(
       dto.map(async ws => {
         return await this.service.update(ws.id, ws);
@@ -71,6 +72,11 @@ export class WorkoutSheetController {
     );
 
     return workoutSheetsOrderedByPosition;
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: number, @Body() dto: EditWorkoutSheetDto) {
+    return await this.service.update(id, dto);
   }
 
   @Delete(':id')
