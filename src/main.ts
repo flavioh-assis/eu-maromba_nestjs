@@ -31,6 +31,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
       tryItOutEnabled: true,
+      docExpansion: 'schemas',
     },
   });
 
