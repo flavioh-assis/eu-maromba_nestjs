@@ -12,14 +12,12 @@ import {
 } from '@nestjs/common';
 import { mapTrainingUpdate, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
-import {
-  CreateTrainingDto,
-  ReorderTrainingDto,
-  UpdateTrainingDto,
-} from './type/training.request';
+import { UpdateTrainingDto } from './dto/update-training.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { ExerciseService } from 'src/exercise/exercise.service';
-import { WorkoutSheetService } from 'src/workout-sheet/workout-sheet.service';
+import { ExerciseService } from 'exercise/exercise.service';
+import { WorkoutSheetService } from 'workout-sheet/workout-sheet.service';
+import { ReorderTrainingDto } from './dto/reorder-training.dto';
+import { CreateTrainingDto } from './dto/create-training.dto';
 
 @ApiTags('Training')
 @Controller()

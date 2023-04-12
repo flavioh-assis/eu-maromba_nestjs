@@ -6,7 +6,6 @@ export type TrainingResponse = {
   };
   workoutSheet: {
     id: number;
-    name: string;
   };
   sets: number;
   reps: number;

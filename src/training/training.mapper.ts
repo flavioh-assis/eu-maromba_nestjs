@@ -1,5 +1,6 @@
 import { Training } from '@prisma/client';
-import { CreateTrainingDto, UpdateTrainingDto } from './type/training.request';
+import { CreateTrainingDto } from './dto/create-training.dto';
+import { UpdateTrainingDto } from './dto/update-training.dto';
 
 export function mapTrainingUpdate(dto: UpdateTrainingDto) {
   const training = {

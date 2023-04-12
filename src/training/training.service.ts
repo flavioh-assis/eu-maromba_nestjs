@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Training } from '@prisma/client';
-import { db } from 'src/db.connection';
+import { db } from 'db.connection';
 import { selectTrainingResponse } from './training.constant';
-import { TrainingResponse } from './type/training.response';
-import { ReorderTrainingDto } from './type/training.request';
+import { TrainingResponse } from './response/training.response';
+import { ReorderTrainingDto } from './dto/reorder-training.dto';
 
 @Injectable()
 export class TrainingService {
