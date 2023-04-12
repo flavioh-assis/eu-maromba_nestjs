@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDefined,
@@ -11,35 +11,43 @@ import {
 import { ExerciseDto } from 'src/exercise/type/exercise.dto';
 import { WorkoutSheetDto } from 'src/workout-sheet/type/workout-sheet.dto';
 
-export class UpdateTrainingDto {
-  @IsOptional()
+export class CreateTrainingDto {
+  @IsDefined()
   @IsNumber()
   @Min(1)
-  sets?: number;
+  @ApiProperty({
+    example: 3,
+  })
+  sets!: number;
 
-  @IsOptional()
+  @IsDefined()
   @IsNumber()
   @Min(1)
-  reps?: number;
+  @ApiProperty({
+    example: 10,
+  })
+  reps!: number;
 
-  @IsOptional()
+  @IsDefined()
   @IsNumber()
   @Min(1)
-  restTime?: number;
+  @ApiProperty({
+    example: 60,
+  })
+  restTime!: number;
 
   @IsOptional()
   @IsString()
+  @ApiPropertyOptional({
+    example: 'Drop-set 20% x3',
+  })
   obs?: string;
 
-  @IsOptional()
+  @IsDefined()
   @ValidateNested({ each: true })
+  @ApiProperty()
   @Type(() => ExerciseDto)
-  exercise?: ExerciseDto;
-
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => WorkoutSheetDto)
-  workoutSheet?: WorkoutSheetDto;
+  exercise!: ExerciseDto;
 }
 
 export class ReorderTrainingDto {
@@ -58,32 +66,47 @@ export class ReorderTrainingDto {
   position!: number;
 }
 
-export class CreateTrainingDto {
-  @IsDefined()
+export class UpdateTrainingDto {
+  @IsOptional()
   @IsNumber()
   @Min(1)
-  sets!: number;
+  @ApiPropertyOptional({
+    example: 4,
+  })
+  sets?: number;
 
-  @IsDefined()
+  @IsOptional()
   @IsNumber()
   @Min(1)
-  reps!: number;
+  @ApiPropertyOptional({
+    example: 8,
+  })
+  reps?: number;
 
-  @IsDefined()
+  @IsOptional()
   @IsNumber()
   @Min(1)
-  restTime!: number;
+  @ApiPropertyOptional({
+    example: 90,
+  })
+  restTime?: number;
 
   @IsOptional()
   @IsString()
+  @ApiPropertyOptional({
+    example: 'Slow reps',
+  })
   obs?: string;
 
-  @IsDefined()
+  @IsOptional()
   @ValidateNested({ each: true })
+  @ApiPropertyOptional()
   @Type(() => ExerciseDto)
-  exercise!: ExerciseDto;
+  exercise?: ExerciseDto;
 
-  constructor() {
-    this.obs = '';
-  }
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @ApiPropertyOptional()
+  @Type(() => WorkoutSheetDto)
+  workoutSheet?: WorkoutSheetDto;
 }
