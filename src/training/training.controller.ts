@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   BadRequestException,
+  ParseArrayPipe,
 } from '@nestjs/common';
 import { mapTrainingUpdate, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
@@ -50,9 +51,27 @@ export class TrainingController {
   }
 
   @Patch()
-  async reorder(@Body() request: ReorderTrainingDto[]) {
+  async reorder(
+    @Body(
+      new ParseArrayPipe({
+        items: ReorderTrainingDto,
+        whitelist: true,
+      })
+    )
+    dto: ReorderTrainingDto[]
+  ) {
+    const validTrainings = await Promise.all(
+      dto.map(async training => {
+        return await this.trainingService.findOne(training.id);
+      })
+    );
+
+    if (validTrainings.some(t => t == null)) {
+      return new BadRequestException('One or more training does not exist.');
+    }
+
     const dbResult = await Promise.all(
-      request.map(async training => {
+      dto.map(async training => {
         return await this.trainingService.update(training.id, training);
       })
     );
@@ -67,14 +86,14 @@ export class TrainingController {
     const trainingInDB = await this.trainingService.findOne(id);
 
     if (!trainingInDB) {
-      return new BadRequestException("Training doesn't exist.");
+      return new BadRequestException('Training does not exist.');
     }
 
     if (training?.exercise) {
       const exerciseInDB = await this.exerciseService.findOne(training.exercise.id);
 
       if (!exerciseInDB) {
-        return new BadRequestException("Exercise doesn't exist.");
+        return new BadRequestException('Exercise does not exist.');
       }
     }
 
@@ -84,7 +103,7 @@ export class TrainingController {
       );
 
       if (!workoutSheetInDB) {
-        return new BadRequestException("Workout sheet doesn't exist.");
+        return new BadRequestException('Workout sheet does not exist.');
       }
     }
 
@@ -106,6 +125,12 @@ export class TrainingController {
 
   @Delete(':id')
   async delete(@Param('id') id: number) {
+    const exerciseInDB = await this.exerciseService.findOne(id);
+
+    if (!exerciseInDB) {
+      return new BadRequestException('Exercise does not exist.');
+    }
+
     return await this.trainingService.delete(id);
   }
 }
