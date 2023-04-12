@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 import { ExerciseDto } from 'exercise/dto/exercise.dto';
-import { WorkoutSheetDto } from 'workout-sheet/type/workout-sheet.dto';
+import { WorkoutSheetDto } from 'workout-sheet/dto/workout-sheet.dto';
 
 export class UpdateTrainingDto {
   @IsOptional()

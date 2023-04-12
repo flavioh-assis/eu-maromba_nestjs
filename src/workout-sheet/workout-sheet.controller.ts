@@ -10,14 +10,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import {
-  CreateWorkoutSheetDto,
-  UpdateWorkoutSheetDto,
-  ReorderWorkoutSheetDto,
-} from './type/workout-sheet.dto';
 import { WorkoutSheetService } from './workout-sheet.service';
 import { WorkoutSheetBuilder } from './workout-sheet.builder';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { CreateWorkoutSheetDto } from './dto/create-workout-sheet.dto';
+import { ReorderWorkoutSheetDto } from './dto/reorder-workout-sheet.dto';
+import { UpdateWorkoutSheetDto } from './dto/update-workout-sheet-dto';
 
 @ApiTags('Workout Sheet')
 @Controller()
