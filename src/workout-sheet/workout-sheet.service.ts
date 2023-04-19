@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { db } from 'db.connection';
-import { WorkoutSheet } from '@prisma/client';
 import { ReorderWorkoutSheetDto } from './dto/reorder-workout-sheet.dto';
 import { UpdateWorkoutSheetDto } from './dto/update-workout-sheet.dto';
+import { WorkoutSheet } from '@prisma/client';
+import { WorkoutSheetResponse } from './model/workout-sheet.response';
 
 @Injectable()
 export class WorkoutSheetService {
@@ -13,10 +14,27 @@ export class WorkoutSheetService {
   }
 
   async findAll() {
-    return await db.workoutSheet.findMany({
+    const dbResult = await db.workoutSheet.findMany({
+      select: {
+        id: true,
+        name: true,
+        position: true,
+        _count: {
+          select: {
+            trainings: true,
+          },
+        },
+      },
       orderBy: {
         position: 'asc',
       },
+    });
+
+    return dbResult?.map(sheet => {
+      return {
+        ...sheet,
+        trainingCount: sheet._count.trainings,
+      } as WorkoutSheetResponse;
     });
   }
 
