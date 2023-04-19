@@ -9,6 +9,12 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   );
+  app.enableCors({
+    origin: '*',
+    methods: '*',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -35,6 +41,6 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(3000);
+  await app.listen(3333);
 }
 bootstrap();
