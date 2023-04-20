@@ -80,4 +80,12 @@ export class TrainingService {
       select: selectTrainingResponse,
     });
   }
+
+  async deleteManyByWorkoutSheetId(workoutSheetId: number) {
+    await db.training.deleteMany({
+      where: {
+        workoutSheetId,
+      },
+    });
+  }
 }
