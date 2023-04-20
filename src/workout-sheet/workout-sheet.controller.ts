@@ -16,11 +16,15 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateWorkoutSheetDto } from './dto/create-workout-sheet.dto';
 import { ReorderWorkoutSheetDto } from './dto/reorder-workout-sheet.dto';
 import { UpdateWorkoutSheetDto } from './dto/update-workout-sheet.dto';
+import { TrainingService } from 'training/training.service';
 
 @ApiTags('Workout Sheet')
 @Controller()
 export class WorkoutSheetController {
-  constructor(private readonly service: WorkoutSheetService) {}
+  constructor(
+    private readonly service: WorkoutSheetService,
+    private readonly trainingService: TrainingService
+  ) {}
 
   @Post()
   async create(@Body() dto: CreateWorkoutSheetDto) {
@@ -95,7 +99,13 @@ export class WorkoutSheetController {
     const exist = await this.service.findOne(id);
 
     if (!exist) {
-      return new BadRequestException("Workout sheet doesn't exist.");
+      return new BadRequestException('Workout sheet do not exist.');
+    }
+
+    const trainings = await this.trainingService.findAllByWorkoutSheetId(id);
+
+    if (trainings.length) {
+      await this.trainingService.deleteManyByWorkoutSheetId(id);
     }
 
     await this.service.delete(id);
