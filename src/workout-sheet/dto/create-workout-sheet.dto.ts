@@ -5,7 +5,7 @@ export class CreateWorkoutSheetDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    example: 'A',
+    example: 'Inferiores',
   })
   name!: string;
 }

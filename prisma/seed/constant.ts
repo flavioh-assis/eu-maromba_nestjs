@@ -1,4 +1,4 @@
-import { Exercise, MuscleGroup } from '.prisma/client';
+import { Exercise, MuscleGroup } from '@prisma/client';
 
 const abs = { id: 1, name: 'Abdomen' };
 const arms = { id: 2, name: 'Braços' };

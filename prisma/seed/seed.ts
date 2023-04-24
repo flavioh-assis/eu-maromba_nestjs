@@ -16,6 +16,8 @@ async function seedMuscleGroups(muscleGroups: MuscleGroup[]) {
       create: { id: group.id, name: group.name },
     });
   });
+
+  console.log('Added muscle group data!');
 }
 
 async function seedExercises(exercises: Exercise[]) {
@@ -35,6 +37,8 @@ async function seedExercises(exercises: Exercise[]) {
       },
     });
   });
+
+  console.log('Added exercise data!');
 }
 
 seed()
