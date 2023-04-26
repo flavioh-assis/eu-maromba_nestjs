@@ -99,7 +99,7 @@ export class WorkoutSheetController {
     const exist = await this.service.findOne(id);
 
     if (!exist) {
-      return new BadRequestException('Workout sheet do not exist.');
+      return new BadRequestException('Workout sheet does not exist.');
     }
 
     const trainings = await this.trainingService.findAllByWorkoutSheetId(id);
