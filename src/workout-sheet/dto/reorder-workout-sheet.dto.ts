@@ -10,7 +10,7 @@ export class ReorderWorkoutSheetDto {
   id!: number;
 
   @IsNumber()
-  @Min(1)
+  @Min(0)
   @ApiProperty({
     example: 2,
   })

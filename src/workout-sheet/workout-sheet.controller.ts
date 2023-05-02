@@ -66,12 +66,12 @@ export class WorkoutSheetController {
     dto: ReorderWorkoutSheetDto[]
   ) {
     const validWorkoutSheets = await Promise.all(
-      dto.map(async training => {
-        return await this.service.findOne(training.id);
+      dto.map(async sheet => {
+        return await this.service.findOne(sheet.id);
       })
     );
 
-    if (validWorkoutSheets.some(t => t == null)) {
+    if (validWorkoutSheets.some(ws => ws == null)) {
       return new BadRequestException('One or more workout sheets do not exist.');
     }
 
