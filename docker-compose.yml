@@ -1,19 +1,6 @@
 version: '3.8'
 
 services:
-  nest-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: nest-api
-    restart: unless-stopped
-    ports:
-      - 3333:3333
-    depends_on:
-      - postgres
-    env_file:
-      - .env
-
   postgres:
     image: postgres:15.2-alpine
     container_name: postgres
