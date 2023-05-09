@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, Min } from 'class-validator';
 
-export class ReorderWorkoutSheetDto {
+export class ReorderRoutineDto {
   @IsNumber()
   @Min(1)
   @ApiProperty({

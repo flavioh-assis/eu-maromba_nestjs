@@ -11,6 +11,8 @@ model MuscleGroup {
   id        Int        @id
   name      String     @db.VarChar(30)
   exercises Exercise[]
+
+  @@map("muscle_groups")
 }
 
 model Exercise {
@@ -19,24 +21,30 @@ model Exercise {
   muscleGroup   MuscleGroup @relation(references: [id], fields: [muscleGroupId])
   muscleGroupId Int
   trainings     Training[]
+
+  @@map("exercises")
 }
 
-model WorkoutSheet {
+model Routine {
   id        Int        @id @default(autoincrement())
   name      String     @db.VarChar(30)
   position  Int
   trainings Training[]
+
+  @@map("routines")
 }
 
 model Training {
-  id             Int          @id @default(autoincrement())
-  exercise       Exercise     @relation(fields: [exerciseId], references: [id])
-  exerciseId     Int
-  workoutSheet   WorkoutSheet @relation(fields: [workoutSheetId], references: [id])
-  workoutSheetId Int
-  sets           Int
-  reps           Int
-  restTime       Int
-  obs            String       @default("") @db.VarChar(100)
-  position       Int
+  id         Int      @id @default(autoincrement())
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  exerciseId Int
+  routine    Routine  @relation(fields: [routineId], references: [id])
+  routineId  Int
+  sets       Int
+  reps       Int
+  restTime   Int
+  obs        String   @default("") @db.VarChar(100)
+  position   Int
+
+  @@map("trainings")
 }

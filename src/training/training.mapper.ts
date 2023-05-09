@@ -8,7 +8,7 @@ export function mapTrainingUpdate(dto: UpdateTrainingDto) {
     reps: dto.reps,
     restTime: dto.restTime,
     obs: dto.obs,
-    workoutSheetId: dto.workoutSheet?.id,
+    routineId: dto.routine?.id,
     exerciseId: dto.exercise?.id,
   } as Training;
 
@@ -23,7 +23,7 @@ export function mapTrainingUpdate(dto: UpdateTrainingDto) {
 
 export function mapTrainingCreate(
   dto: CreateTrainingDto,
-  workoutSheetId: number,
+  routineId: number,
   position: number
 ) {
   return {
@@ -32,7 +32,7 @@ export function mapTrainingCreate(
     reps: dto.reps,
     restTime: dto.restTime,
     obs: dto.obs,
-    workoutSheetId,
+    routineId,
     position,
   } as Training;
 }

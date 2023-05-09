@@ -1,4 +1,4 @@
-export class WorkoutSheet {
+export class Routine {
   id!: number;
   name!: string;
   position!: number;

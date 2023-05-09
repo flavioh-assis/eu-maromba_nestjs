@@ -1,7 +1,7 @@
 import { Routes } from '@nestjs/core';
 import { ExerciseModule } from './exercise/exercise.module';
 import { TrainingModule } from './training/training.module';
-import { WorkoutSheetModule } from './workout-sheet/workout-sheet.module';
+import { RoutineModule } from './routine/routine.module';
 import { MuscleGroupModule } from './muscle-group/muscle-group.module';
 
 export const routes: Routes = [
@@ -16,11 +16,11 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'workout-sheets',
-    module: WorkoutSheetModule,
+    path: 'routines',
+    module: RoutineModule,
     children: [
       {
-        path: ':workoutSheetId/trainings',
+        path: ':routineId/trainings',
         module: TrainingModule,
       },
     ],

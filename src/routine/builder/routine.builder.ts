@@ -1,6 +1,6 @@
-import { WorkoutSheet } from '../model/workout-sheet.model';
+import { Routine } from '../model/routine.model';
 
-export class WorkoutSheetBuilder {
+export class RoutineBuilder {
   private name!: string;
   private position!: number;
 
@@ -15,6 +15,6 @@ export class WorkoutSheetBuilder {
   }
 
   build() {
-    return new WorkoutSheet(this.name, this.position);
+    return new Routine(this.name, this.position);
   }
 }

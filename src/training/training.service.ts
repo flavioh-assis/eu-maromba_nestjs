@@ -16,10 +16,10 @@ export class TrainingService {
     return createdTraining as TrainingResponse;
   }
 
-  async findAllByWorkoutSheetId(workoutSheetId: number) {
+  async findAllByRoutineId(routineId: number) {
     const dbResult = await db.training.findMany({
       where: {
-        workoutSheetId,
+        routineId,
       },
       select: selectTrainingResponse,
       orderBy: [
@@ -41,10 +41,10 @@ export class TrainingService {
     });
   }
 
-  async findLastPosition(workoutSheetId: number) {
+  async findLastPosition(routineId: number) {
     const dbResult = await db.training.findMany({
       where: {
-        workoutSheetId,
+        routineId,
       },
       select: {
         position: true,
@@ -81,10 +81,10 @@ export class TrainingService {
     });
   }
 
-  async deleteManyByWorkoutSheetId(workoutSheetId: number) {
+  async deleteManyByRoutineId(routineId: number) {
     await db.training.deleteMany({
       where: {
-        workoutSheetId,
+        routineId,
       },
     });
   }

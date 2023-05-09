@@ -4,7 +4,7 @@ export class TrainingResponse {
     id: number;
     name: string;
   };
-  workoutSheet!: {
+  routine!: {
     id: number;
   };
   sets!: number;

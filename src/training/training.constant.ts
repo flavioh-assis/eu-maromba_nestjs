@@ -6,7 +6,7 @@ export const selectTrainingResponse = {
       name: true,
     },
   },
-  workoutSheet: {
+  routine: {
     select: {
       id: true,
     },
