@@ -1,5 +1,5 @@
 import { Exercise, MuscleGroup, PrismaClient } from '@prisma/client';
-import { exercises, muscleGroups } from '../seed/constant';
+import { exercises, muscleGroups } from './constant';
 
 const prisma = new PrismaClient();
 
