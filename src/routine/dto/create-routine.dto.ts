@@ -7,5 +7,5 @@ export class CreateRoutineDto {
   @ApiProperty({
     example: 'Inferiores',
   })
-  name!: string;
+  title!: string;
 }

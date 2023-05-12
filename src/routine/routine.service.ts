@@ -2,15 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { db } from 'db.connection';
 import { ReorderRoutineDto } from './dto/reorder-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
-import { Routine } from '@prisma/client';
-import { RoutineResponse } from './model/routine.response';
+import { CreateRoutineDto } from './dto/create-routine.dto';
+import { RoutineRepository } from './routine.repository';
+import { Routine } from './routine.entity';
+import { RoutineResponse } from './routine.response';
 
 @Injectable()
 export class RoutineService {
-  async create(routine: Routine) {
-    return await db.routine.create({
-      data: routine,
-    });
+  constructor(private readonly routineRepository: RoutineRepository) {}
+
+  async create(dto: CreateRoutineDto) {
+    const lastPosition = await this.findLastPosition();
+    const newRoutine = new Routine(dto.title, lastPosition);
+
+    const result = await this.routineRepository.create(newRoutine);
+
+    return new RoutineResponse(result);
   }
 
   async findAll() {
@@ -31,10 +38,7 @@ export class RoutineService {
     });
 
     return dbResult?.map(routine => {
-      return {
-        ...routine,
-        trainingCount: routine._count.trainings,
-      } as RoutineResponse;
+      return new RoutineResponse(routine);
     });
   }
 
@@ -47,19 +51,9 @@ export class RoutineService {
   }
 
   async findLastPosition() {
-    const dbResult = await db.routine.findMany({
-      select: {
-        position: true,
-      },
-      orderBy: [
-        {
-          position: 'desc',
-        },
-      ],
-      take: 1,
-    });
+    const position = await this.routineRepository.findLastPosition();
 
-    return dbResult.length ? dbResult[0].position : 0;
+    return position != null ? position + 1 : 0;
   }
 
   async update(id: number, routine: UpdateRoutineDto | ReorderRoutineDto) {

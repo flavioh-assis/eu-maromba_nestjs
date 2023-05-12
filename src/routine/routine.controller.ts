@@ -11,7 +11,6 @@ import {
   Post,
 } from '@nestjs/common';
 import { RoutineService } from './routine.service';
-import { RoutineBuilder } from './builder/routine.builder';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { ReorderRoutineDto } from './dto/reorder-routine.dto';
@@ -28,14 +27,7 @@ export class RoutineController {
 
   @Post()
   async create(@Body() dto: CreateRoutineDto) {
-    const lastPosition = await this.routineService.findLastPosition();
-
-    const newRoutine = new RoutineBuilder()
-      .setName(dto.name)
-      .setPosition(lastPosition + 1)
-      .build();
-
-    return await this.routineService.create(newRoutine);
+    return await this.routineService.create(dto);
   }
 
   @Get()
