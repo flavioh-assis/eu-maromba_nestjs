@@ -40,4 +40,12 @@ export class RoutineRepository {
       },
     });
   }
+
+  async findOne(id: number) {
+    return await this.prisma.routine.findFirst({
+      where: {
+        id,
+      },
+    });
+  }
 }

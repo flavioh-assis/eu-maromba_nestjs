@@ -29,11 +29,7 @@ export class RoutineService {
   }
 
   async findOne(id: number) {
-    return await db.routine.findUnique({
-      where: {
-        id,
-      },
-    });
+    return await this.routineRepository.findOne(id);
   }
 
   async findLastPosition() {
