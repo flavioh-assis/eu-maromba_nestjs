@@ -12,8 +12,8 @@ export class RoutineService {
   constructor(private readonly routineRepository: RoutineRepository) {}
 
   async create(dto: CreateRoutineDto) {
-    const lastPosition = await this.findLastPosition();
-    const newRoutine = new Routine(dto.title, lastPosition);
+    const positionAvailable = await this.findNextPositionAvailable();
+    const newRoutine = new Routine(dto.title, positionAvailable);
 
     const result = await this.routineRepository.create(newRoutine);
 
@@ -32,7 +32,7 @@ export class RoutineService {
     return await this.routineRepository.findOne(id);
   }
 
-  async findLastPosition() {
+  async findNextPositionAvailable() {
     const position = await this.routineRepository.findLastPosition();
 
     return position != null ? position + 1 : 0;
