@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -15,15 +14,11 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { ReorderRoutineDto } from './dto/reorder-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
-import { TrainingService } from 'training/training.service';
 
 @ApiTags('Routine')
 @Controller()
 export class RoutineController {
-  constructor(
-    private readonly routineService: RoutineService,
-    private readonly trainingService: TrainingService
-  ) {}
+  constructor(private readonly routineService: RoutineService) {}
 
   @Post()
   async create(@Body() dto: CreateRoutineDto) {
@@ -68,18 +63,6 @@ export class RoutineController {
   @Delete(':id')
   @HttpCode(204)
   async delete(@Param('id') id: number) {
-    const exist = await this.routineService.findOne(id);
-
-    if (!exist) {
-      return new BadRequestException('Routine does not exist.');
-    }
-
-    const trainings = await this.trainingService.findAllByRoutineId(id);
-
-    if (trainings.length) {
-      await this.trainingService.deleteManyByRoutineId(id);
-    }
-
     await this.routineService.delete(id);
   }
 }

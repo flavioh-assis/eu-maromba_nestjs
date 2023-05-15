@@ -1,15 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { db } from 'db.connection';
 import { ReorderRoutineDto } from './dto/reorder-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { RoutineRepository } from './routine.repository';
 import { Routine } from './routine.entity';
 import { RoutineResponse } from './routine.response';
+import { TrainingService } from 'training/training.service';
 
 @Injectable()
 export class RoutineService {
-  constructor(private readonly routineRepository: RoutineRepository) {}
+  constructor(
+    private readonly routineRepository: RoutineRepository,
+    private readonly trainingService: TrainingService
+  ) {}
 
   async create(dto: CreateRoutineDto) {
     const positionAvailable = await this.findNextPositionAvailable();
@@ -68,10 +71,18 @@ export class RoutineService {
   }
 
   async delete(id: number) {
-    await db.routine.delete({
-      where: {
-        id: id,
-      },
-    });
+    const exist = await this.routineRepository.findOne(id);
+
+    if (!exist) {
+      return new BadRequestException('Routine does not exist.');
+    }
+
+    const trainings = await this.trainingService.findAllByRoutineId(id);
+
+    if (trainings.length) {
+      await this.trainingService.deleteManyByRoutineId(id);
+    }
+
+    await this.routineRepository.delete(id);
   }
 }

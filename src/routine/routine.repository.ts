@@ -78,4 +78,12 @@ export class RoutineRepository {
       },
     });
   }
+
+  async delete(id: number) {
+    return await this.prisma.routine.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
