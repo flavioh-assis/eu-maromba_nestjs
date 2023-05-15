@@ -42,12 +42,21 @@ export class RoutineService {
   }
 
   async reorder(dto: ReorderRoutineDto[]) {
-    dto?.map(async routine => {
-      const result = await this.findOne(routine.id);
+    const positionsSet = new Set<number>();
 
-      if (result == null)
-        return new BadRequestException('One or more routines do not exist.');
-    });
+    await Promise.all(
+      dto.map(async routine => {
+        const result = await this.findOne(routine.id);
+
+        if (result == null)
+          throw new BadRequestException('At least one routine does not exist.');
+
+        if (positionsSet.has(routine.position)) {
+          throw new BadRequestException('At least two routines have the same position.');
+        }
+        positionsSet.add(routine.position);
+      })
+    );
 
     const result = await Promise.all(
       dto.map(async routine => {
