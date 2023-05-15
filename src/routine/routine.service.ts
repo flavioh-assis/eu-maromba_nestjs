@@ -21,24 +21,10 @@ export class RoutineService {
   }
 
   async findAll() {
-    const dbResult = await db.routine.findMany({
-      select: {
-        id: true,
-        name: true,
-        position: true,
-        _count: {
-          select: {
-            trainings: true,
-          },
-        },
-      },
-      orderBy: {
-        position: 'asc',
-      },
-    });
+    const result = await this.routineRepository.findAll();
 
-    return dbResult?.map(routine => {
-      return new RoutineResponse(routine);
+    return result?.map(entity => {
+      return new RoutineResponse(entity);
     });
   }
 
