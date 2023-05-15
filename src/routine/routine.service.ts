@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { db } from 'db.connection';
 import { ReorderRoutineDto } from './dto/reorder-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
@@ -36,6 +36,25 @@ export class RoutineService {
     const position = await this.routineRepository.findLastPosition();
 
     return position != null ? position + 1 : 0;
+  }
+
+  async reorder(dto: ReorderRoutineDto[]) {
+    dto?.map(async routine => {
+      const result = await this.findOne(routine.id);
+
+      if (result == null)
+        return new BadRequestException('One or more routines do not exist.');
+    });
+
+    const result = await Promise.all(
+      dto.map(async routine => {
+        return await this.routineRepository.updatePosition(routine.id, routine.position);
+      })
+    );
+
+    const routinesOrderedByPosition = result.sort((a, b) => a.position - b.position);
+
+    return routinesOrderedByPosition;
   }
 
   async update(id: number, routine: UpdateRoutineDto | ReorderRoutineDto) {

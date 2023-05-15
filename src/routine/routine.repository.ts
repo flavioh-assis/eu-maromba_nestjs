@@ -3,7 +3,6 @@ import { PrismaService } from 'database/prisma.service';
 import { Routine } from './routine.entity';
 import { RoutineDbResult } from 'database/prisma.interfaces';
 import { sqltag } from '@prisma/client/runtime';
-import { prismaRoutineSelect } from './routine.constants';
 
 @Injectable()
 export class RoutineRepository {
@@ -34,7 +33,16 @@ export class RoutineRepository {
 
   async findAll() {
     return await this.prisma.routine.findMany({
-      select: prismaRoutineSelect,
+      select: {
+        id: true,
+        name: true,
+        position: true,
+        _count: {
+          select: {
+            trainings: true,
+          },
+        },
+      },
       orderBy: {
         position: 'asc',
       },
@@ -45,6 +53,17 @@ export class RoutineRepository {
     return await this.prisma.routine.findFirst({
       where: {
         id,
+      },
+    });
+  }
+
+  async updatePosition(id: number, position: number) {
+    return await this.prisma.routine.update({
+      where: {
+        id,
+      },
+      data: {
+        position,
       },
     });
   }

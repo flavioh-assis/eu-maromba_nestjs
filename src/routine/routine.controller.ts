@@ -57,25 +57,7 @@ export class RoutineController {
     )
     dto: ReorderRoutineDto[]
   ) {
-    const validRoutines = await Promise.all(
-      dto.map(async routine => {
-        return await this.routineService.findOne(routine.id);
-      })
-    );
-
-    if (validRoutines.some(routine => routine == null)) {
-      return new BadRequestException('One or more routines do not exist.');
-    }
-
-    const dbResult = await Promise.all(
-      dto.map(async routine => {
-        return await this.routineService.update(routine.id, routine);
-      })
-    );
-
-    const routinesOrderedByPosition = dbResult.sort((a, b) => a.position - b.position);
-
-    return routinesOrderedByPosition;
+    return this.routineService.reorder(dto);
   }
 
   @Patch(':id')
