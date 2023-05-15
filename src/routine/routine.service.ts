@@ -57,13 +57,14 @@ export class RoutineService {
     return routinesOrderedByPosition;
   }
 
-  async update(id: number, routine: UpdateRoutineDto | ReorderRoutineDto) {
-    return await db.routine.update({
-      where: {
-        id,
-      },
-      data: routine,
-    });
+  async update(id: number, routine: UpdateRoutineDto) {
+    const exist = await this.findOne(id);
+
+    if (!exist) {
+      return new BadRequestException('Routine does not exist.');
+    }
+
+    return await this.routineRepository.update(id, routine.title);
   }
 
   async delete(id: number) {

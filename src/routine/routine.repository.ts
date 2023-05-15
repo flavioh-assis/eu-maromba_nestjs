@@ -67,4 +67,15 @@ export class RoutineRepository {
       },
     });
   }
+
+  async update(id: number, title: string) {
+    return await this.prisma.routine.update({
+      where: {
+        id,
+      },
+      data: {
+        name: title,
+      },
+    });
+  }
 }
