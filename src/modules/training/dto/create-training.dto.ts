@@ -8,7 +8,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { ExerciseDto } from 'exercise/dto/exercise.dto';
+import { ExerciseDto } from 'modules/exercise/dto/exercise.dto';
 
 export class CreateTrainingDto {
   @IsDefined()

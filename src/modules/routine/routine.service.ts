@@ -5,7 +5,7 @@ import { CreateRoutineDto } from './dto/create-routine.dto';
 import { RoutineRepository } from './routine.repository';
 import { Routine } from './routine.entity';
 import { RoutineResponse } from './routine.response';
-import { TrainingService } from 'training/training.service';
+import { TrainingService } from 'modules/training/training.service';
 
 @Injectable()
 export class RoutineService {

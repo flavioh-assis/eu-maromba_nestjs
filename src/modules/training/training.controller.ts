@@ -14,8 +14,8 @@ import { mapTrainingUpdate, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
 import { UpdateTrainingDto } from './dto/update-training.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { ExerciseService } from 'exercise/exercise.service';
-import { RoutineService } from 'routine/routine.service';
+import { ExerciseService } from 'modules/exercise/exercise.service';
+import { RoutineService } from 'modules/routine/routine.service';
 import { ReorderTrainingDto } from './dto/reorder-training.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
 

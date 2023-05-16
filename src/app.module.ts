@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 import { routes } from './routes';
-import { ExerciseModule } from './exercise/exercise.module';
-import { MuscleGroupModule } from './muscle-group/muscle-group.module';
-import { TrainingModule } from './training/training.module';
-import { RoutineModule } from './routine/routine.module';
+import { ExerciseModule } from 'modules/exercise/exercise.module';
+import { MuscleGroupModule } from 'modules/muscle-group/muscle-group.module';
+import { TrainingModule } from 'modules/training/training.module';
+import { RoutineModule } from 'modules/routine/routine.module';
 
 @Module({
   imports: [
