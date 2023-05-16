@@ -1,14 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { ExerciseService } from './exercise.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Exercise')
 @Controller()
 export class ExerciseController {
-  constructor(private readonly service: ExerciseService) {}
+  constructor(private readonly exerciseService: ExerciseService) {}
 
   @Get()
-  async findAllForMuscleGroup(@Param('muscleGroupId') muscleGroupId: number) {
-    return await this.service.findAllForMuscleGroup(muscleGroupId);
+  async findAllForMuscleGroup(
+    @Param('muscleGroupId', ParseIntPipe) muscleGroupId: number
+  ) {
+    return await this.exerciseService.findAllForMuscleGroup(muscleGroupId);
   }
 }

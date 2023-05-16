@@ -1,30 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { db } from 'db.connection';
+import { ExerciseRepository } from './exercise.repository';
+import { ExerciseResponse } from './exercise.response';
 
 @Injectable()
 export class ExerciseService {
+  constructor(private readonly exerciseRepository: ExerciseRepository) {}
+
   async findOne(id: number) {
-    return await db.exercise.findFirst({
-      where: {
-        id,
-      },
-    });
+    const result = await this.exerciseRepository.findOne(id);
+
+    return result ? new ExerciseResponse(result) : result;
   }
 
   async findAllForMuscleGroup(muscleGroupId: number) {
-    return await db.exercise.findMany({
-      where: {
-        muscleGroupId,
-      },
-      select: {
-        id: true,
-        name: true,
-      },
-      orderBy: [
-        {
-          name: 'asc',
-        },
-      ],
-    });
+    const result = await this.exerciseRepository.findAllForMuscleGroup(muscleGroupId);
+
+    return result.map(e => new ExerciseResponse(e));
   }
 }
