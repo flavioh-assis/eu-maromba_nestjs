@@ -1,8 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
-import { ExerciseDto } from 'modules/exercise/dto/exercise.dto';
-import { RoutineIdDto } from 'modules/routine/dto/routine.dto';
+import { ExerciseIdDto } from 'modules/exercise/dto/exercise-id.dto';
+import { RoutineIdDto } from 'modules/routine/dto/routine-id.dto';
 
 export class UpdateTrainingDto {
   @IsOptional()
@@ -39,8 +39,8 @@ export class UpdateTrainingDto {
   @IsOptional()
   @ValidateNested({ each: true })
   @ApiPropertyOptional()
-  @Type(() => ExerciseDto)
-  exercise?: ExerciseDto;
+  @Type(() => ExerciseIdDto)
+  exercise?: ExerciseIdDto;
 
   @IsOptional()
   @ValidateNested({ each: true })

@@ -8,7 +8,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { ExerciseDto } from 'modules/exercise/dto/exercise.dto';
+import { ExerciseIdDto } from 'modules/exercise/dto/exercise-id.dto';
 
 export class CreateTrainingDto {
   @IsDefined()
@@ -45,6 +45,6 @@ export class CreateTrainingDto {
   @IsDefined()
   @ValidateNested({ each: true })
   @ApiProperty()
-  @Type(() => ExerciseDto)
-  exercise!: ExerciseDto;
+  @Type(() => ExerciseIdDto)
+  exercise!: ExerciseIdDto;
 }
