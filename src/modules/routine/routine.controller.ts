@@ -6,6 +6,7 @@ import {
   HttpCode,
   Param,
   ParseArrayPipe,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -56,13 +57,13 @@ export class RoutineController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() dto: UpdateRoutineDto) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateRoutineDto) {
     return await this.routineService.update(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     await this.routineService.delete(id);
   }
 }
