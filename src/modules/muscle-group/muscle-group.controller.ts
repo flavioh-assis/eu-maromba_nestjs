@@ -5,10 +5,10 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Muscle Group')
 @Controller()
 export class MuscleGroupController {
-  constructor(private readonly service: MuscleGroupService) {}
+  constructor(private readonly muscleGroupService: MuscleGroupService) {}
 
   @Get()
   async findAll() {
-    return await this.service.findAll();
+    return await this.muscleGroupService.findAll();
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'database/prisma.service';
 import { Routine } from './routine.entity';
-import { RoutineDbResult } from 'database/prisma.interfaces';
+import { RoutineDbResult } from 'database/interfaces/routine.result';
 import { sqltag } from '@prisma/client/runtime';
 
 @Injectable()

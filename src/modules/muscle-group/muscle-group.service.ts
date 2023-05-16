@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { db } from 'db.connection';
+import { MuscleGroupRepository } from './muscle-group.repository';
+import { MuscleGroupResponse } from './muscle-group.response';
 
 @Injectable()
 export class MuscleGroupService {
+  constructor(private readonly muscleGroupRepository: MuscleGroupRepository) {}
+
   async findAll() {
-    return await db.muscleGroup.findMany({
-      orderBy: [
-        {
-          name: 'asc',
-        },
-      ],
-    });
+    const result = await this.muscleGroupRepository.findAll();
+
+    return result.map(mg => new MuscleGroupResponse(mg));
   }
 }

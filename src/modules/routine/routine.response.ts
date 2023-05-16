@@ -1,4 +1,4 @@
-import { RoutineDbResult } from 'database/prisma.interfaces';
+import { RoutineDbResult } from 'database/interfaces/routine.result';
 
 export class RoutineResponse {
   readonly id: number;
