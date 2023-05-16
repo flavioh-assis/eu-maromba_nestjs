@@ -5,6 +5,7 @@ import { ExerciseModule } from 'modules/exercise/exercise.module';
 import { MuscleGroupModule } from 'modules/muscle-group/muscle-group.module';
 import { TrainingModule } from 'modules/training/training.module';
 import { RoutineModule } from 'modules/routine/routine.module';
+import { PrismaModule } from 'database/prisma.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { RoutineModule } from 'modules/routine/routine.module';
     ExerciseModule,
     TrainingModule,
     RoutineModule,
+    PrismaModule,
   ],
 })
 export class AppModule {}
