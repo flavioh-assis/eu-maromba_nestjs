@@ -44,6 +44,11 @@ export class TrainingService {
   }
 
   async findAllByRoutine(routineId: number) {
+    const routineExist = await this.routineRepository.findOne(routineId);
+    if (!routineExist) {
+      throw new UnprocessableEntityException('Routine does not exist.');
+    }
+
     return await this.trainingRepository.findAllByRoutine(routineId);
   }
 
