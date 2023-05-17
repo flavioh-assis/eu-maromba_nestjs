@@ -24,6 +24,7 @@
     "prisma:migrate:dev": "npx prisma migrate dev && pnpm seed",
     "prisma:migrate-deploy": "npx prisma migrate deploy",
     "prisma:gen:mig": "pnpm prisma:generate && pnpm prisma:migrate:dev",
+    "prisma:studio": "npx prisma studio",
     "docker": "docker-compose up -d"
   },
   "dependencies": {

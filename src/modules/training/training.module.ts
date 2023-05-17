@@ -4,8 +4,9 @@ import { TrainingService } from './training.service';
 import { ExerciseService } from 'modules/exercise/exercise.service';
 import { RoutineService } from 'modules/routine/routine.service';
 import { RoutineRepository } from 'modules/routine/routine.repository';
-import { PrismaService } from 'database/prisma.service';
 import { ExerciseRepository } from 'modules/exercise/exercise.repository';
+import { PrismaModule } from 'database/prisma.module';
+import { TrainingRepository } from './training.repository';
 
 @Module({
   controllers: [TrainingController],
@@ -14,8 +15,9 @@ import { ExerciseRepository } from 'modules/exercise/exercise.repository';
     ExerciseService,
     RoutineService,
     RoutineRepository,
-    PrismaService,
     ExerciseRepository,
+    TrainingRepository,
   ],
+  imports: [PrismaModule],
 })
 export class TrainingModule {}

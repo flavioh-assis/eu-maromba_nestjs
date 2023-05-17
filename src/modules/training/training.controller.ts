@@ -6,138 +6,55 @@ import {
   Param,
   Patch,
   Delete,
-  BadRequestException,
-  ParseArrayPipe,
   HttpCode,
+  ParseIntPipe,
+  Put,
 } from '@nestjs/common';
-import { mapTrainingUpdate, mapTrainingCreate } from './training.mapper';
 import { TrainingService } from './training.service';
 import { UpdateTrainingDto } from './dto/update-training.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { ExerciseService } from 'modules/exercise/exercise.service';
-import { RoutineService } from 'modules/routine/routine.service';
-import { ReorderTrainingDto } from './dto/reorder-training.dto';
+import {
+  ReorderTrainingDto,
+  reorderApiBodyOptions,
+  reorderArrayValidator,
+} from './dto/reorder-training.dto';
 import { CreateTrainingDto } from './dto/create-training.dto';
 
 @ApiTags('Training')
 @Controller()
 export class TrainingController {
-  constructor(
-    private readonly trainingService: TrainingService,
-    private readonly exerciseService: ExerciseService,
-    private readonly routineService: RoutineService
-  ) {}
+  constructor(private readonly trainingService: TrainingService) {}
 
   @Post()
-  async create(@Param('routineId') routineId: number, @Body() dto: CreateTrainingDto) {
-    const routineInDB = await this.routineService.findOne(routineId);
-    if (!routineInDB) {
-      return new BadRequestException('Routine does not exist.');
-    }
-
-    const exerciseInDB = await this.exerciseService.findOne(dto.exercise.id);
-    if (!exerciseInDB) {
-      return new BadRequestException('Exercise does not exist.');
-    }
-
-    const lastPosition = await this.trainingService.findLastPosition(routineId);
-    const mappedTraining = mapTrainingCreate(dto, routineId, lastPosition + 1);
-
-    return await this.trainingService.create(mappedTraining);
+  async create(
+    @Param('routineId', ParseIntPipe) routineId: number,
+    @Body() dto: CreateTrainingDto
+  ) {
+    return await this.trainingService.create(routineId, dto);
   }
 
   @Get()
-  async findAllInRoutine(@Param('routineId') routineId: number) {
+  async findAllInRoutine(@Param('routineId', ParseIntPipe) routineId: number) {
     return await this.trainingService.findAllByRoutineId(routineId);
   }
 
   @Patch()
-  @ApiBody({
-    type: ReorderTrainingDto,
-    isArray: true,
-    examples: {
-      multiple: {
-        value: [
-          { id: 1, position: 2 },
-          { id: 2, position: 1 },
-        ],
-      },
-    },
-  })
+  @ApiBody(reorderApiBodyOptions)
   async reorder(
-    @Body(
-      new ParseArrayPipe({
-        items: ReorderTrainingDto,
-        whitelist: true,
-      })
-    )
+    @Body(reorderArrayValidator)
     dto: ReorderTrainingDto[]
   ) {
-    const validTrainings = await Promise.all(
-      dto.map(async training => {
-        return await this.trainingService.findOne(training.id);
-      })
-    );
-
-    if (validTrainings.some(t => t == null)) {
-      return new BadRequestException('One or more trainings do not exist.');
-    }
-
-    const dbResult = await Promise.all(
-      dto.map(async training => {
-        return await this.trainingService.update(training.id, training);
-      })
-    );
-
-    const trainingsOrderedByPosition = dbResult.sort((a, b) => a.position - b.position);
-
-    return trainingsOrderedByPosition;
+    return await this.trainingService.reorder(dto);
   }
 
-  @Patch(':id')
-  async update(@Param('id') id: number, @Body() dto: UpdateTrainingDto) {
-    const trainingInDB = await this.trainingService.findOne(id);
-
-    if (!trainingInDB) return new BadRequestException('Training does not exist.');
-
-    if (dto.exercise) {
-      const exerciseInDB = await this.exerciseService.findOne(dto.exercise.id);
-
-      if (!exerciseInDB) {
-        return new BadRequestException('Exercise does not exist.');
-      }
-    }
-
-    if (dto.routine) {
-      const routineInDB = await this.routineService.findOne(dto.routine.id);
-
-      if (!routineInDB) {
-        return new BadRequestException('Routine does not exist.');
-      }
-    }
-
-    const mappedTraining = mapTrainingUpdate(dto);
-
-    if (dto.routine?.id && trainingInDB.routine.id !== mappedTraining.routineId) {
-      const lastPositionInRoutine = await this.trainingService.findLastPosition(
-        Number(mappedTraining.routineId)
-      );
-
-      mappedTraining.position = lastPositionInRoutine + 1;
-    }
-
-    return await this.trainingService.update(id, mappedTraining);
+  @Put(':id')
+  async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTrainingDto) {
+    return await this.trainingService.update(id, dto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  async delete(@Param('id') id: number) {
-    const trainingInDB = await this.trainingService.findOne(id);
-
-    if (!trainingInDB) {
-      return new BadRequestException('Training does not exist.');
-    }
-
+  async delete(@Param('id', ParseIntPipe) id: number) {
     await this.trainingService.delete(id);
   }
 }
