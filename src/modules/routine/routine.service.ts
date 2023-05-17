@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ReorderRoutineDto } from './dto/reorder-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { CreateRoutineDto } from './dto/create-routine.dto';
@@ -15,10 +19,10 @@ export class RoutineService {
   ) {}
 
   async create(dto: CreateRoutineDto) {
-    const positionAvailable = await this.findNextPositionAvailable();
-    const newRoutine = new Routine(dto.title, positionAvailable);
+    const positionAvailable = await this.getNextPositionAvailable();
+    const routine = new Routine(dto.title, positionAvailable);
 
-    const result = await this.routineRepository.create(newRoutine);
+    const result = await this.routineRepository.create(routine);
 
     return new RoutineResponse(result);
   }
@@ -26,7 +30,7 @@ export class RoutineService {
   async findAll() {
     const result = await this.routineRepository.findAll();
 
-    return result?.map(entity => {
+    return result.map(entity => {
       return new RoutineResponse(entity);
     });
   }
@@ -35,7 +39,7 @@ export class RoutineService {
     return await this.routineRepository.findOne(id);
   }
 
-  async findNextPositionAvailable() {
+  async getNextPositionAvailable() {
     const position = await this.routineRepository.findLastPosition();
 
     return position != null ? position + 1 : 0;
@@ -48,8 +52,7 @@ export class RoutineService {
       dto.map(async routine => {
         const result = await this.findOne(routine.id);
 
-        if (result == null)
-          throw new BadRequestException('At least one routine does not exist.');
+        if (result == null) throw new UnprocessableEntityException();
 
         if (positionsSet.has(routine.position)) {
           throw new BadRequestException('At least two routines have the same position.');
@@ -66,32 +69,31 @@ export class RoutineService {
 
     const routinesOrderedByPosition = result.sort((a, b) => a.position - b.position);
 
-    return routinesOrderedByPosition;
+    return routinesOrderedByPosition.map(r => new RoutineResponse(r));
   }
 
   async update(id: number, routine: UpdateRoutineDto) {
-    const exist = await this.findOne(id);
-
-    if (!exist) {
-      return new BadRequestException('Routine does not exist.');
+    const routineExist = await this.findOne(id);
+    if (!routineExist) {
+      return new UnprocessableEntityException('Routine does not exist.');
     }
 
-    return await this.routineRepository.update(id, routine.title);
+    const result = await this.routineRepository.update(id, routine.title);
+
+    return new RoutineResponse(result);
   }
 
   async delete(id: number) {
-    const exist = await this.routineRepository.findOne(id);
-
-    if (!exist) {
-      return new BadRequestException('Routine does not exist.');
+    const routineExist = await this.routineRepository.findOne(id);
+    if (!routineExist) {
+      throw new UnprocessableEntityException('Routine does not exist.');
     }
 
     const trainings = await this.trainingService.findAllByRoutineId(id);
-
     if (trainings.length) {
-      await this.trainingService.deleteManyByRoutineId(id);
+      await this.trainingService.deleteManyByRoutine(id);
     }
 
-    await this.routineRepository.delete(id);
+    return await this.routineRepository.delete(id);
   }
 }

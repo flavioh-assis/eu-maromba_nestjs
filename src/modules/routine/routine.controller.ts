@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { RoutineService } from './routine.service';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
@@ -56,7 +57,7 @@ export class RoutineController {
     return this.routineService.reorder(dto);
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateRoutineDto) {
     return await this.routineService.update(id, dto);
   }

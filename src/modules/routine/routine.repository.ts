@@ -9,7 +9,7 @@ export class RoutineRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(routine: Routine) {
-    const dbResult = await this.prisma.routine.create({
+    return (await this.prisma.routine.create({
       data: routine,
       include: {
         _count: {
@@ -18,9 +18,7 @@ export class RoutineRepository {
           },
         },
       },
-    });
-
-    return dbResult as RoutineDbResult;
+    })) as RoutineDbResult;
   }
 
   async findLastPosition() {
@@ -32,11 +30,8 @@ export class RoutineRepository {
   }
 
   async findAll() {
-    return await this.prisma.routine.findMany({
-      select: {
-        id: true,
-        name: true,
-        position: true,
+    return (await this.prisma.routine.findMany({
+      include: {
         _count: {
           select: {
             trainings: true,
@@ -46,37 +41,58 @@ export class RoutineRepository {
       orderBy: {
         position: 'asc',
       },
-    });
+    })) as RoutineDbResult[];
   }
 
   async findOne(id: number) {
-    return await this.prisma.routine.findFirst({
+    return (await this.prisma.routine.findFirst({
       where: {
         id,
       },
-    });
+      include: {
+        _count: {
+          select: {
+            trainings: true,
+          },
+        },
+      },
+    })) as RoutineDbResult | null;
   }
 
   async updatePosition(id: number, position: number) {
-    return await this.prisma.routine.update({
+    return (await this.prisma.routine.update({
       where: {
         id,
       },
       data: {
         position,
       },
-    });
+      include: {
+        _count: {
+          select: {
+            trainings: true,
+          },
+        },
+      },
+    })) as RoutineDbResult;
   }
 
   async update(id: number, title: string) {
-    return await this.prisma.routine.update({
+    return (await this.prisma.routine.update({
       where: {
         id,
       },
       data: {
         name: title,
       },
-    });
+      include: {
+        _count: {
+          select: {
+            trainings: true,
+          },
+        },
+      },
+    })) as RoutineDbResult;
   }
 
   async delete(id: number) {
