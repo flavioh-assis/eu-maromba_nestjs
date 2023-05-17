@@ -35,7 +35,7 @@ export class TrainingRepository {
     return result.length ? result[0].position : null;
   }
 
-  async findAllByRoutineId(routineId: number) {
+  async findAllByRoutine(routineId: number) {
     return (await this.prisma.training.findMany({
       where: {
         routineId,

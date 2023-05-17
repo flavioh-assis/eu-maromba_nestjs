@@ -43,8 +43,8 @@ export class TrainingService {
     return position != null ? position + 1 : 0;
   }
 
-  async findAllByRoutineId(routineId: number) {
-    return await this.trainingRepository.findAllByRoutineId(routineId);
+  async findAllByRoutine(routineId: number) {
+    return await this.trainingRepository.findAllByRoutine(routineId);
   }
 
   async findOne(id: number) {
@@ -108,9 +108,5 @@ export class TrainingService {
     }
 
     return await this.trainingRepository.delete(id);
-  }
-
-  async deleteManyByRoutine(routineId: number) {
-    return await this.trainingRepository.deleteManyByRoutine(routineId);
   }
 }

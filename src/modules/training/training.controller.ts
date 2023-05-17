@@ -35,7 +35,7 @@ export class TrainingController {
 
   @Get()
   async findAllInRoutine(@Param('routineId', ParseIntPipe) routineId: number) {
-    return await this.trainingService.findAllByRoutineId(routineId);
+    return await this.trainingService.findAllByRoutine(routineId);
   }
 
   @Patch()

@@ -9,13 +9,13 @@ import { CreateRoutineDto } from './dto/create-routine.dto';
 import { RoutineRepository } from './routine.repository';
 import { Routine } from './routine.entity';
 import { RoutineResponse } from './routine.response';
-import { TrainingService } from 'modules/training/training.service';
+import { TrainingRepository } from 'modules/training/training.repository';
 
 @Injectable()
 export class RoutineService {
   constructor(
     private readonly routineRepository: RoutineRepository,
-    private readonly trainingService: TrainingService
+    private readonly trainingRepository: TrainingRepository
   ) {}
 
   async create(dto: CreateRoutineDto) {
@@ -89,9 +89,9 @@ export class RoutineService {
       throw new UnprocessableEntityException('Routine does not exist.');
     }
 
-    const trainings = await this.trainingService.findAllByRoutineId(id);
+    const trainings = await this.trainingRepository.findAllByRoutine(id);
     if (trainings.length) {
-      await this.trainingService.deleteManyByRoutine(id);
+      await this.trainingRepository.deleteManyByRoutine(id);
     }
 
     return await this.routineRepository.delete(id);
