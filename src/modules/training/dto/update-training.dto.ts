@@ -1,8 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsString, Min, ValidateNested } from 'class-validator';
-import { ExerciseIdDto } from 'modules/exercise/dto/exercise-id.dto';
-import { RoutineIdDto } from 'modules/routine/dto/routine-id.dto';
+import { ExerciseIdDto } from '@exercise/dto/exercise-id.dto';
+import { RoutineIdDto } from '@routine/dto/routine-id.dto';
 
 export class UpdateTrainingDto {
   @IsNumber()

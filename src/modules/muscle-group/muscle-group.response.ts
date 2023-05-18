@@ -1,4 +1,4 @@
-import { MuscleGroupDbResult } from 'database/interfaces/muscle-group.result';
+import { MuscleGroupDbResult } from '@database/interfaces/muscle-group.result';
 
 export class MuscleGroupResponse {
   readonly id: number;

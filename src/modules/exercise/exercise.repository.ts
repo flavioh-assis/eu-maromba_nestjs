@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ExerciseDbResult } from 'database/interfaces/exercise.result';
-import { PrismaService } from 'database/prisma.service';
+import { ExerciseDbResult } from '@database/interfaces/exercise.result';
+import { PrismaService } from '@database/prisma.service';
 
 @Injectable()
 export class ExerciseRepository {

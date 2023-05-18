@@ -1,4 +1,4 @@
-import { ExerciseDbResult } from 'database/interfaces/exercise.result';
+import { ExerciseDbResult } from '@database/interfaces/exercise.result';
 
 export class ExerciseResponse {
   readonly id: number;

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'database/prisma.service';
+import { PrismaService } from '@database/prisma.service';
 import { selectTrainingResponse } from './training.constant';
 import { CreateTraining } from './entities/create-training.entity';
 import { UpdateTraining } from './entities/update-training.entity';

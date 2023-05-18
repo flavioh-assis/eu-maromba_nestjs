@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { ReorderTrainingDto } from './dto/reorder-training.dto';
 import { TrainingRepository } from './training.repository';
-import { RoutineRepository } from 'modules/routine/routine.repository';
-import { ExerciseRepository } from 'modules/exercise/exercise.repository';
+import { RoutineRepository } from '@routine/routine.repository';
+import { ExerciseRepository } from '@exercise/exercise.repository';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { UpdateTraining } from './entities/update-training.entity';
 import { UpdateTrainingDto } from './dto/update-training.dto';

@@ -1,4 +1,4 @@
-import { RoutineDbResult } from 'database/interfaces/routine.result';
+import { RoutineDbResult } from '@database/interfaces/routine.result';
 
 export class RoutineResponse {
   readonly id: number;

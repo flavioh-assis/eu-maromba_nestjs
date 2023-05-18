@@ -13,5 +13,29 @@
     "incremental": true,
     "skipLibCheck": true,
     "strict": true,
-  }
+    "paths": {
+      "@database/*": [
+        "./database/*"
+      ],
+      "@exercise/*": [
+        "./modules/exercise/*"
+      ],
+      "@muscle-group/*": [
+        "./modules/muscle-group/*"
+      ],
+      "@routine/*": [
+        "./modules/routine/*"
+      ],
+      "@training/*": [
+        "./modules/training/*"
+      ],
+    },
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "jest",
+    "coverage"
+  ]
 }

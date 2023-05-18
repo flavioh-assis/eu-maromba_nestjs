@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'database/prisma.service';
+import { PrismaService } from '@database/prisma.service';
 import { Routine } from './routine.entity';
-import { RoutineDbResult } from 'database/interfaces/routine.result';
-import { sqltag } from '@prisma/client/runtime';
+import { RoutineDbResult } from '@database/interfaces/routine.result';
 
 @Injectable()
 export class RoutineRepository {
@@ -22,8 +21,8 @@ export class RoutineRepository {
   }
 
   async findLastPosition() {
-    const result = await this.prisma.$queryRaw<{ max: number | null }[]>(
-      sqltag`SELECT MAX(position) FROM routines`
+    const result = await this.prisma.$queryRawUnsafe<{ max: number | null }[]>(
+      `SELECT MAX(position) FROM routines`
     );
 
     return result[0].max;
