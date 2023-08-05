@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { MuscleGroupRepository } from './muscle-group.repository';
+import { Inject, Injectable } from '@nestjs/common';
 import { MuscleGroupResponse } from './muscle-group.response';
+import { IMuscleGroupRepository } from 'repositories/muscle-group.interface';
 
 @Injectable()
 export class MuscleGroupService {
-  constructor(private readonly muscleGroupRepository: MuscleGroupRepository) {}
+  constructor(
+    @Inject('IMuscleGroupRepository')
+    private muscleGroupRepository: IMuscleGroupRepository
+  ) {}
 
   async findAll() {
     const result = await this.muscleGroupRepository.findAll();

@@ -29,6 +29,9 @@
       "@training/*": [
         "./modules/training/*"
       ],
+      "@repositories/*": [
+        "./repositories/*"
+      ],
     },
   },
   "exclude": [

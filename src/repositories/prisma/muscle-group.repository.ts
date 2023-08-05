@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@database/prisma.service';
+import { IMuscleGroupRepository } from 'repositories/muscle-group.interface';
 
 @Injectable()
-export class MuscleGroupRepository {
+export class PrismaMuscleGroupRepository implements IMuscleGroupRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {

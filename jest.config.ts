@@ -45,6 +45,7 @@ export default {
     '@muscle-group/(.*)': '<rootDir>/modules/muscle-group/$1',
     '@routine/(.*)': '<rootDir>/modules/routine/$1',
     '@training/(.*)': '<rootDir>/modules/training/$1',
+    '@repositories/(.*)': '<rootDir>/repositories/$1',
   },
 
   // A map from regular expressions to paths to transformers
